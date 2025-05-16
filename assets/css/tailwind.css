@@ -40,6 +40,7 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --font-jost: "Jost", sans-serif;
 }
 
 :root {
@@ -120,4 +121,27 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.hide-native-number[type="number"]::-webkit-outer-spin-button,
+.hide-native-number[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.hide-native-number[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.custom-el-loader {
+  @apply !bg-[#00000060] !backdrop-blur-2xl;
+}
+
+.custom-el-loader .el-loading-spinner {
+  @apply bg-white max-w-[400px] rounded-2xl py-10 relative top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2;
+}
+
+.custom-el-loader .el-loading-spinner .el-loading-text {
+  @apply font-semibold text-lg text-slate-950 mt-6;
 }
