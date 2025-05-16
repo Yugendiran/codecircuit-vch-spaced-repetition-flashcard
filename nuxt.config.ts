@@ -23,4 +23,39 @@ export default defineNuxtConfig({
      */
     componentDir: "./components/ui",
   },
+
+  app: {
+    head: {
+      link: [
+        {
+          rel: "stylesheet",
+          href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,100..900;1,100..900&display=swap",
+        },
+      ],
+      script: [
+        {
+          innerHTML: `
+            (function() {
+              try {
+                const isDark = localStorage.theme === 'dark' || 
+                  (!('theme' in localStorage) && 
+                  window.matchMedia('(prefers-color-scheme: dark)').matches);
+                
+                if (isDark) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              } catch (e) {}
+            })();
+          `,
+          type: "text/javascript",
+        },
+      ],
+    },
+  },
 });
