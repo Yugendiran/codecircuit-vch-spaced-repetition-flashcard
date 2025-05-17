@@ -66,8 +66,6 @@
             class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
           ></span>
         </Button>
-
-        <Button variant="secondary"> Review Deck <Badge>4</Badge> </Button>
       </div>
     </div>
 
@@ -85,170 +83,158 @@
       </span>
     </div>
 
-    <Tabs default-value="all" class="mt-5">
-      <TabsList>
-        <TabsTrigger value="all"> All </TabsTrigger>
-        <TabsTrigger value="due">
-          Due Today <Badge class="text-xs px-1 py-0 rounded-full">4</Badge>
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value="all">
-        <!-- Empty state when no cards exist -->
-        <div v-if="deck.cards.length === 0" class="mt-8 text-center py-16">
-          <div class="flex justify-center">
-            <Inbox class="size-12 text-neutral-600 mb-3" />
-          </div>
-          <h3 class="text-lg font-medium text-white mb-2">
-            No cards in this deck
-          </h3>
-          <p class="text-neutral-400 mb-6">
-            Get started by adding your first flashcard
-          </p>
-          <Button @click="modals.createCard.isOpen = true">
-            <Plus class="size-4 mr-2" />
-            Create New Card
-          </Button>
-
-          <br />
-          <br />
-
-          <Button
-            variant="outline"
-            @click="generateCards"
-            :disabled="isGenerating"
-            class="relative overflow-hidden group"
-          >
-            <span
-              v-if="!isGenerating"
-              class="text-purple-400 mr-2 group-hover:animate-pulse"
-              >✨</span
-            >
-            <span
-              v-else
-              class="absolute inset-0 bg-purple-500/10 animate-pulse"
-            ></span>
-            <Loader2 v-if="isGenerating" class="animate-spin mr-2 size-4" />
-            <span class="relative z-10">{{
-              isGenerating ? "Generating..." : "Generate with AI"
-            }}</span>
-            <span
-              class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-            ></span>
-          </Button>
-
-          <!-- <Button variant="outline"> </Button> -->
+    <div class="mt-5">
+      <div v-if="deck.cards.length === 0" class="mt-8 text-center py-16">
+        <div class="flex justify-center">
+          <Inbox class="size-12 text-neutral-600 mb-3" />
         </div>
+        <h3 class="text-lg font-medium text-white mb-2">
+          No cards in this deck
+        </h3>
+        <p class="text-neutral-400 mb-6">
+          Get started by adding your first flashcard
+        </p>
+        <Button @click="modals.createCard.isOpen = true">
+          <Plus class="size-4 mr-2" />
+          Create New Card
+        </Button>
 
-        <!-- Empty state when no search results -->
-        <div
-          v-else-if="filteredCards.length === 0"
-          class="mt-8 text-center py-16"
-        >
-          <div class="flex justify-center">
-            <SearchX class="size-12 text-neutral-600 mb-3" />
-          </div>
-          <h3 class="text-lg font-medium text-white mb-2">No cards found</h3>
-          <p class="text-neutral-400 mb-6">
-            Try a different search term or clear your search
-          </p>
-          <Button variant="outline" @click="search = ''">
-            <X class="size-4 mr-2" />
-            Clear Search
-          </Button>
-        </div>
+        <br />
+        <br />
 
-        <!-- Cards grid -->
-        <div
-          v-else
-          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
+        <Button
+          variant="outline"
+          @click="generateCards"
+          :disabled="isGenerating"
+          class="relative overflow-hidden group"
         >
-          <div
-            v-for="(card, index) in filteredCards"
-            :key="index"
-            class="bg-neutral-900 rounded-xl p-6 border border-neutral-800 transition-all duration-500 hover:shadow-lg hover:shadow-purple-500/5 hover:-translate-y-1 group"
-            :class="{ 'card-highlight': card.isNew }"
+          <span
+            v-if="!isGenerating"
+            class="text-purple-400 mr-2 group-hover:animate-pulse"
+            >✨</span
           >
-            <div class="flex justify-between items-start mb-3">
-              <div
-                class="bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-md px-2 py-1 text-xs text-neutral-400"
-              >
-                Card #{{ index + 1 }}
-              </div>
-              <div class="flex items-center space-x-1">
-                <span class="text-xs text-neutral-500"
-                  >Rep: {{ card.repetitions || 0 }}</span
-                >
-                <div
-                  class="h-4 w-4 rounded-full"
-                  :class="getCardStatusClass(card)"
-                ></div>
-              </div>
-            </div>
+          <span
+            v-else
+            class="absolute inset-0 bg-purple-500/10 animate-pulse"
+          ></span>
+          <Loader2 v-if="isGenerating" class="animate-spin mr-2 size-4" />
+          <span class="relative z-10">{{
+            isGenerating ? "Generating..." : "Generate with AI"
+          }}</span>
+          <span
+            class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></span>
+        </Button>
 
-            <p class="text-white font-medium mb-4 card-content break-words">
-              {{ card.front }}
-            </p>
+        <!-- <Button variant="outline"> </Button> -->
+      </div>
 
-            <div class="flex flex-wrap gap-2 mb-4">
-              <span
-                v-for="(tag, tagIndex) in card.tags"
-                :key="tagIndex"
-                class="px-2 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-md transition-colors hover:bg-purple-900/30 hover:text-purple-300"
-              >
-                {{ tag }}
-              </span>
-            </div>
+      <!-- Empty state when no search results -->
+      <div
+        v-else-if="filteredCards.length === 0"
+        class="mt-8 text-center py-16"
+      >
+        <div class="flex justify-center">
+          <SearchX class="size-12 text-neutral-600 mb-3" />
+        </div>
+        <h3 class="text-lg font-medium text-white mb-2">No cards found</h3>
+        <p class="text-neutral-400 mb-6">
+          Try a different search term or clear your search
+        </p>
+        <Button variant="outline" @click="search = ''">
+          <X class="size-4 mr-2" />
+          Clear Search
+        </Button>
+      </div>
 
-            <div class="flex items-center gap-2 mt-4 flex-wrap">
-              <Button
-                size="sm"
-                variant="outline"
-                class="flex items-center gap-2 group-hover:border-purple-500/30 transition-colors duration-300"
-                @click="openViewCardDialog(getOriginalIndex(card))"
-              >
-                <Eye
-                  class="size-3 group-hover:text-purple-400 transition-colors duration-300"
-                />
-                View
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                class="flex items-center gap-2 group-hover:border-blue-500/30 transition-colors duration-300"
-                @click="openEditCardDialog(getOriginalIndex(card))"
-              >
-                <Edit
-                  class="size-3 group-hover:text-blue-400 transition-colors duration-300"
-                />
-                Edit
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                class="flex items-center gap-2 group-hover:border-red-500/30 transition-colors duration-300"
-                @click="openDeleteCardDialog(getOriginalIndex(card))"
-              >
-                <Trash
-                  class="size-3 group-hover:text-red-400 transition-colors duration-300"
-                />
-                Delete
-              </Button>
-            </div>
+      <!-- Cards grid -->
+      <div
+        v-else
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
+      >
+        <div
+          v-for="(card, index) in filteredCards"
+          :key="index"
+          class="bg-neutral-900 rounded-xl p-6 border border-neutral-800 transition-all duration-500 hover:shadow-lg hover:shadow-purple-500/5 hover:-translate-y-1 group"
+          :class="{ 'card-highlight': card.isNew }"
+        >
+          <div class="flex justify-between items-start mb-3">
             <div
-              class="flex justify-between text-neutral-400 text-sm mt-4 gap-4"
+              class="bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-md px-2 py-1 text-xs text-neutral-400"
             >
-              <span
-                >Next:
-                <span class="text-purple-300">{{
-                  formatNextReview(card.nextReview)
-                }}</span></span
+              Card #{{ index + 1 }}
+            </div>
+            <div class="flex items-center space-x-1">
+              <span class="text-xs text-neutral-500"
+                >Rep: {{ card.repetitions || 0 }}</span
               >
+              <div
+                class="h-4 w-4 rounded-full"
+                :class="getCardStatusClass(card)"
+              ></div>
             </div>
           </div>
+
+          <p class="text-white font-medium mb-4 card-content break-words">
+            {{ card.front }}
+          </p>
+
+          <div class="flex flex-wrap gap-2 mb-4">
+            <span
+              v-for="(tag, tagIndex) in card.tags"
+              :key="tagIndex"
+              class="px-2 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-md transition-colors hover:bg-purple-900/30 hover:text-purple-300"
+            >
+              {{ tag }}
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2 mt-4 flex-wrap">
+            <Button
+              size="sm"
+              variant="outline"
+              class="flex items-center gap-2 group-hover:border-purple-500/30 transition-colors duration-300"
+              @click="openViewCardDialog(getOriginalIndex(card))"
+            >
+              <Eye
+                class="size-3 group-hover:text-purple-400 transition-colors duration-300"
+              />
+              View
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              class="flex items-center gap-2 group-hover:border-blue-500/30 transition-colors duration-300"
+              @click="openEditCardDialog(getOriginalIndex(card))"
+            >
+              <Edit
+                class="size-3 group-hover:text-blue-400 transition-colors duration-300"
+              />
+              Edit
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              class="flex items-center gap-2 group-hover:border-red-500/30 transition-colors duration-300"
+              @click="openDeleteCardDialog(getOriginalIndex(card))"
+            >
+              <Trash
+                class="size-3 group-hover:text-red-400 transition-colors duration-300"
+              />
+              Delete
+            </Button>
+          </div>
+          <div class="flex justify-between text-neutral-400 text-sm mt-4 gap-4">
+            <span
+              >Next:
+              <span class="text-purple-300">{{
+                formatNextReview(card.nextReview)
+              }}</span></span
+            >
+          </div>
         </div>
-      </TabsContent>
-      <TabsContent value="due"> Change your password here. </TabsContent>
-    </Tabs>
+      </div>
+    </div>
 
     <Dialog v-model:open="modals.createCard.isOpen">
       <DialogContent>
