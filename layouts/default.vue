@@ -1,6 +1,7 @@
 <template>
   <div class="font-jost">
     <SidebarProvider>
+      <MobileSidebarTrigger />
       <Sidebar
         collapsible="icon"
         class="overflow-hidden"
@@ -83,6 +84,23 @@ import {
   ChartArea,
   FolderOpen,
 } from "lucide-vue-next";
+import {
+  MobileSidebarTrigger,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarRail,
+  SidebarTrigger,
+} from "~/components/ui/sidebar";
+import { Separator } from "~/components/ui/separator";
+import { Collapsible } from "~/components/ui/collapsible";
+import { Button } from "~/components/ui/button";
 
 export default {
   components: {
@@ -93,6 +111,21 @@ export default {
     BookOpenText,
     ChartArea,
     FolderOpen,
+    MobileSidebarTrigger,
+    SidebarProvider,
+    Sidebar,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarTrigger,
+    Separator,
+    SidebarContent,
+    SidebarGroup,
+    Collapsible,
+    SidebarMenuItem,
+    SidebarFooter,
+    SidebarRail,
+    SidebarInset,
+    Button,
   },
   data() {
     return {
