@@ -1,6 +1,20 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-2xl font-bold text-white mb-6">Your Decks</h1>
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-2xl font-bold text-white">Your Decks</h1>
+
+      <div v-if="totalDueCards > 0" class="flex items-center">
+        <NuxtLink to="/review">
+          <Button
+            variant="outline"
+            class="flex items-center gap-2 border-purple-800 text-purple-400 hover:bg-purple-900/20"
+          >
+            <span class="text-purple-400">📚</span>
+            {{ totalDueCards }} cards due today
+          </Button>
+        </NuxtLink>
+      </div>
+    </div>
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div
@@ -491,6 +505,7 @@ import {
   FlipHorizontal,
 } from "lucide-vue-next";
 import decks from "@/data/decks.json";
+import dayjs from "dayjs";
 
 export default {
   components: {
@@ -538,6 +553,16 @@ export default {
         "Science",
       ],
     };
+  },
+  computed: {
+    totalDueCards() {
+      if (!this.decks || this.decks.length === 0) return 0;
+
+      // Sum up all due cards across all decks
+      return this.decks.reduce((total, deck) => {
+        return total + this.countDueCards(deck);
+      }, 0);
+    },
   },
   methods: {
     resetCreateDeckForm() {
@@ -692,19 +717,17 @@ export default {
     countDueCards(deck) {
       if (!deck || !deck.cards || deck.cards.length === 0) return 0;
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+      const today = dayjs().format("YYYY-MM-DD");
 
       return deck.cards.filter((card) => {
         // Consider a card due if:
         // 1. It's explicitly marked as new (isNew = true)
         if (card.isNew === true) return true;
 
-        // 2. Its next review date matches today exactly
+        // 2. Its next review date is today or earlier (overdue)
         if (card.nextReview && card.nextReview !== "") {
-          const nextReview = new Date(card.nextReview);
-          nextReview.setHours(0, 0, 0, 0);
-          return nextReview.getTime() === today.getTime();
+          const nextReview = dayjs(card.nextReview).format("YYYY-MM-DD");
+          return nextReview <= today;
         }
 
         return false;

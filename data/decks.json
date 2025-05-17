@@ -1,195 +1,128 @@
 [
   {
     "id": 1,
-    "name": "Exploration",
-    "description": "Dive into essential concepts and vocabulary related to space exploration and astronomy.",
+    "name": "Pioneers",
+    "description": "Explore key concepts and figures in the history of exploration and innovation.",
     "cards": [
       {
-        "front": "What is the name of the first human-made satellite launched into space?",
-        "back": "Sputnik 1",
-        "tags": ["space", "satellites", "history"],
-        "nextReview": "",
+        "front": "Who was the first European to reach India by sea, connecting Europe and Asia?",
+        "back": "Vasco da Gama",
+        "tags": ["Exploration", "History", "Portugal"],
+        "nextReview": "2026-05-17",
         "repetitions": 0,
         "id": 1,
-        "isNew": true
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
       },
       {
-        "front": "Who was the first human to travel into space?",
-        "back": "Yuri Gagarin",
-        "tags": ["space", "astronauts", "history"],
-        "nextReview": "",
+        "front": "What was the name of the ship that Christopher Columbus used on his first voyage across the Atlantic?",
+        "back": "The Santa Maria",
+        "tags": ["Exploration", "Columbus", "History"],
+        "nextReview": "2023-05-17",
         "repetitions": 0,
-        "id": 1,
-        "isNew": false
+        "id": 2,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
       },
       {
-        "front": "What is the primary purpose of a space probe?",
-        "back": "To collect data from distant objects in space",
-        "tags": ["space", "technology", "exploration"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What is the difference between a comet and an asteroid?",
-        "back": "A comet is made of ice and dust; an asteroid is made primarily of rock and metal.",
-        "tags": ["space", "comets", "asteroids"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What celestial body is known as the 'Red Planet'?",
-        "back": "Mars",
-        "tags": ["space", "planets", "astronomy"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What is the largest planet in our Solar System?",
-        "back": "Jupiter",
-        "tags": ["space", "planets", "astronomy"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "Which spacecraft was the first to land on the Moon?",
-        "back": "Apollo 11",
-        "tags": ["space", "moon", "history"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What is the term for the region of space where the Sun's influence is no longer dominant?",
-        "back": "Heliosphere",
-        "tags": ["space", "astronomy", "exploration"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What type of star is the Sun classified as?",
-        "back": "G-type main-sequence star (G dwarf)",
-        "tags": ["space", "stars", "astronomy"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What phenomenon causes the Northern Lights?",
-        "back": "Aurora Borealis, caused by charged particles from the Sun interacting with the Earth's magnetic field.",
-        "tags": ["space", "atmosphere", "phenomena"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      }
-    ]
-  },
-  {
-    "id": 2,
-    "name": "Math Fundamentals",
-    "description": "A comprehensive collection of flashcards covering essential mathematical concepts and principles.",
-    "cards": [
-      {
-        "front": "What is the Pythagorean Theorem?",
-        "back": "The Pythagorean Theorem states that in a right-angled triangle, the square of the length of the hypotenuse is equal to the sum of the squares of the lengths of the other two sides. It can be expressed as a² + b² = c².",
-        "tags": ["geometry", "theorems", "triangles"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What is the formula for the area of a circle?",
-        "back": "The area A of a circle is given by the formula A = πr², where r is the radius of the circle.",
-        "tags": ["geometry", "area", "circles"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "Define a prime number.",
-        "back": "A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself.",
-        "tags": ["number theory", "primes", "mathematics"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What is the quadratic formula?",
-        "back": "The quadratic formula is used to find the roots of a quadratic equation ax² + bx + c = 0, and is given by x = (-b ± √(b² - 4ac)) / (2a).",
-        "tags": ["algebra", "equations", "quadratics"],
-        "nextReview": "",
-        "repetitions": 0,
-        "id": 1,
-        "isNew": false
-      },
-      {
-        "front": "What is the difference between mean, median, and mode?",
-        "back": "Mean is the average of a set of numbers, median is the middle value when the numbers are sorted, and mode is the value that occurs most frequently.",
-        "tags": ["statistics", "data", "mean/median/mode"],
+        "front": "Which famous explorer is known for his journey to the South Pole?",
+        "back": "Roald Amundsen",
+        "tags": ["Exploration", "Antarctica", "Amundsen"],
         "nextReview": "2025-05-17",
         "repetitions": 0,
-        "id": 1,
-        "isNew": false
+        "id": 3,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
       },
       {
-        "front": "What are complementary angles?",
-        "back": "Complementary angles are two angles whose measures add up to 90 degrees.",
-        "tags": ["geometry", "angles", "complementary"],
-        "nextReview": "",
+        "front": "What technological innovation allowed for longer sea voyages during the Age of Exploration?",
+        "back": "The Caravel",
+        "tags": ["Innovation", "Transportation", "History"],
+        "nextReview": "2025-05-17",
         "repetitions": 0,
-        "id": 1,
-        "isNew": false
+        "id": 4,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
       },
       {
-        "front": "What is the slope-intercept form of a linear equation?",
-        "back": "The slope-intercept form of a linear equation is y = mx + b, where m is the slope and b is the y-intercept.",
-        "tags": ["algebra", "linear equations", "slope"],
-        "nextReview": "",
+        "front": "Which ancient civilization is credited with creating the first known map?",
+        "back": "The Babylonians",
+        "tags": ["Mapping", "History", "Babylon"],
+        "nextReview": "2025-05-17",
         "repetitions": 0,
-        "id": 1,
-        "isNew": false
+        "id": 5,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
       },
       {
-        "front": "What is the sum of the interior angles of a triangle?",
-        "back": "The sum of the interior angles of a triangle is always 180 degrees.",
-        "tags": ["geometry", "triangles", "angles"],
-        "nextReview": "",
+        "front": "What important invention did Johannes Gutenberg introduce to Europe in the 15th century?",
+        "back": "The Printing Press",
+        "tags": ["Innovation", "Printing", "Gutenberg"],
+        "nextReview": "2025-05-17",
         "repetitions": 0,
-        "id": 1,
-        "isNew": false
+        "id": 6,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
       },
       {
-        "front": "Define a rational number.",
-        "back": "A rational number is a number that can be expressed as the quotient or fraction of two integers, where the denominator is not zero.",
-        "tags": ["number theory", "rational numbers", "mathematics"],
-        "nextReview": "",
+        "front": "Who was the first person to circumnavigate the globe?",
+        "back": "Ferdinand Magellan",
+        "tags": ["Exploration", "Magellan", "History"],
+        "nextReview": "2025-05-17",
         "repetitions": 0,
-        "id": 1,
-        "isNew": false
+        "id": 7,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
       },
       {
-        "front": "What is the difference between permutations and combinations?",
-        "back": "Permutations are arrangements of items where the order matters, while combinations are selections of items where the order does not matter.",
-        "tags": ["combinatorics", "permutations", "combinations"],
-        "nextReview": "",
+        "front": "Which explorer is famous for his expeditions in North America and is associated with the discovery of the Mississippi River?",
+        "back": "Hernando de Soto",
+        "tags": ["Exploration", "North America", "De Soto"],
+        "nextReview": "2025-05-17",
         "repetitions": 0,
-        "id": 1,
-        "isNew": false
+        "id": 8,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
+      },
+      {
+        "front": "What was the primary motivation for many explorers during the Age of Exploration?",
+        "back": "Trade and the search for new trade routes",
+        "tags": ["Exploration", "Motivation", "History"],
+        "nextReview": "2025-05-17",
+        "repetitions": 0,
+        "id": 9,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
+      },
+      {
+        "front": "Which invention during the Age of Exploration greatly improved navigation at sea?",
+        "back": "The Astrolabe",
+        "tags": ["Innovation", "Navigation", "History"],
+        "nextReview": "2025-05-17",
+        "repetitions": 0,
+        "id": 10,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 0,
+        "reviewHistory": []
       }
     ]
   }

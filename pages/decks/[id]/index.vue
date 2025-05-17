@@ -827,6 +827,7 @@ import {
   ChevronRight,
 } from "lucide-vue-next";
 import decks from "@/data/decks.json";
+import dayjs from "dayjs";
 
 // Helper function for generating random colors
 function getRandomColor() {
@@ -991,6 +992,11 @@ export default {
         (c) => c.front === card.front && c.back === card.back
       );
     },
+
+    getTodayDate() {
+      return dayjs().format("YYYY-MM-DD");
+    },
+
     async generateCards() {
       if (!this.deck) return;
 
@@ -1066,10 +1072,15 @@ export default {
     confirmGeneratedCards() {
       if (this.modals.aiGeneration.cards.length > 0) {
         // Add the generated cards to the deck
-        this.deck.cards = [
-          ...this.deck.cards,
-          ...this.modals.aiGeneration.cards,
-        ];
+        const todayDate = this.getTodayDate();
+        const cardsWithTodayDate = this.modals.aiGeneration.cards.map(
+          (card) => ({
+            ...card,
+            nextReview: todayDate,
+          })
+        );
+
+        this.deck.cards = [...this.deck.cards, ...cardsWithTodayDate];
 
         // Show success message and confetti
         this.showGenerationSuccess = true;
@@ -1138,7 +1149,7 @@ export default {
         front: this.modals.createCard.values.front,
         back: this.modals.createCard.values.back,
         tags: this.modals.createCard.values.tags,
-        nextReview: "",
+        nextReview: this.getTodayDate(),
         repetitions: 0,
         easiness: 2.5,
         interval: 0,
