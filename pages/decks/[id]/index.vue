@@ -32,8 +32,6 @@
 
         <div class="text-neutral-400 flex items-center gap-2 mt-2 text-sm">
           {{ deck.cards.length }} Cards
-          <div class="h-1 w-1 min-w-1 rounded-full bg-neutral-400"></div>
-          - dues today
         </div>
       </div>
 
