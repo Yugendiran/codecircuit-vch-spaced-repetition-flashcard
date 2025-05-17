@@ -165,44 +165,84 @@
           <div
             v-for="(card, index) in filteredCards"
             :key="index"
-            class="bg-neutral-900 rounded-xl p-6 border border-neutral-800 transition-all duration-500"
+            class="bg-neutral-900 rounded-xl p-6 border border-neutral-800 transition-all duration-500 hover:shadow-lg hover:shadow-purple-500/5 hover:-translate-y-1 group"
             :class="{ 'card-highlight': card.isNew }"
           >
-            <p class="text-white font-medium mb-4">{{ card.front }}</p>
+            <div class="flex justify-between items-start mb-3">
+              <div
+                class="bg-gradient-to-br from-neutral-800 to-neutral-900 rounded-md px-2 py-1 text-xs text-neutral-400"
+              >
+                Card #{{ index + 1 }}
+              </div>
+              <div class="flex items-center space-x-1">
+                <span class="text-xs text-neutral-500"
+                  >Rep: {{ card.repetitions || 0 }}</span
+                >
+                <div
+                  class="h-4 w-4 rounded-full"
+                  :class="getCardStatusClass(card)"
+                ></div>
+              </div>
+            </div>
+
+            <p class="text-white font-medium mb-4 card-content break-words">
+              {{ card.front }}
+            </p>
+
+            <div class="flex flex-wrap gap-2 mb-4">
+              <span
+                v-for="(tag, tagIndex) in card.tags"
+                :key="tagIndex"
+                class="px-2 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-md transition-colors hover:bg-purple-900/30 hover:text-purple-300"
+              >
+                {{ tag }}
+              </span>
+            </div>
+
             <div class="flex items-center gap-2 mt-4 flex-wrap">
               <Button
                 size="sm"
                 variant="outline"
-                class="flex items-center gap-2"
+                class="flex items-center gap-2 group-hover:border-purple-500/30 transition-colors duration-300"
                 @click="openViewCardDialog(getOriginalIndex(card))"
               >
-                <Eye class="size-3" />
+                <Eye
+                  class="size-3 group-hover:text-purple-400 transition-colors duration-300"
+                />
                 View
               </Button>
               <Button
                 size="sm"
                 variant="outline"
-                class="flex items-center gap-2"
+                class="flex items-center gap-2 group-hover:border-blue-500/30 transition-colors duration-300"
                 @click="openEditCardDialog(getOriginalIndex(card))"
               >
-                <Edit class="size-3" />
+                <Edit
+                  class="size-3 group-hover:text-blue-400 transition-colors duration-300"
+                />
                 Edit
               </Button>
               <Button
                 size="sm"
-                variant="destructive"
-                class="flex items-center gap-2"
+                variant="outline"
+                class="flex items-center gap-2 group-hover:border-red-500/30 transition-colors duration-300"
                 @click="openDeleteCardDialog(getOriginalIndex(card))"
               >
-                <Trash class="size-3" />
+                <Trash
+                  class="size-3 group-hover:text-red-400 transition-colors duration-300"
+                />
                 Delete
               </Button>
             </div>
             <div
               class="flex justify-between text-neutral-400 text-sm mt-4 gap-4"
             >
-              <span>Next review: {{ card.nextReview }}</span>
-              <span>Repetitions: {{ card.repetitions }}</span>
+              <span
+                >Next:
+                <span class="text-purple-300">{{
+                  formatNextReview(card.nextReview)
+                }}</span></span
+              >
             </div>
           </div>
         </div>
@@ -392,12 +432,24 @@
     </Dialog>
 
     <Dialog v-model:open="modals.viewCard.isOpen">
-      <DialogContent>
+      <DialogContent class="max-w-xl">
         <DialogHeader class="border-b border-neutral-800 pb-4">
-          <DialogTitle>View Card</DialogTitle>
+          <DialogTitle class="flex items-center">
+            <span
+              class="text-gradient bg-gradient-to-r from-purple-400 to-indigo-400"
+            >
+              Flashcard
+            </span>
+            <Badge class="ml-3 bg-neutral-800 text-neutral-300">
+              {{
+                modals.viewCard.cardIndex !== null &&
+                deck.cards[modals.viewCard.cardIndex].tags[0]
+              }}
+            </Badge>
+          </DialogTitle>
         </DialogHeader>
 
-        <div class="py-4">
+        <div class="py-8">
           <div class="relative min-h-[300px] w-full perspective-1000">
             <div
               class="absolute w-full h-full transition-transform duration-700 transform-style-preserve-3d"
@@ -405,19 +457,45 @@
             >
               <!-- Front of card -->
               <div
-                class="absolute w-full h-full backface-hidden rounded-lg p-6 border border-neutral-800 bg-neutral-900 shadow-xl"
+                class="absolute w-full h-full backface-hidden rounded-lg p-6 border border-neutral-800 bg-gradient-to-b from-neutral-900 to-neutral-950 shadow-xl"
               >
-                <div class="flex flex-col h-full">
-                  <h3 class="text-lg font-medium text-neutral-400 mb-4">
+                <div class="flex flex-col h-full relative">
+                  <div
+                    class="absolute top-0 right-0 w-20 h-20 text-neutral-800 opacity-20"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1"
+                      class="w-full h-full"
+                    >
+                      <path
+                        d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                      ></path>
+                    </svg>
+                  </div>
+
+                  <h3
+                    class="text-lg font-medium text-neutral-400 mb-6 flex items-center"
+                  >
+                    <span
+                      class="bg-gradient-to-r from-purple-500 to-indigo-500 size-2 rounded-full mr-2"
+                    ></span>
                     Question
                   </h3>
-                  <p class="text-white text-xl flex-grow">
-                    {{
-                      modals.viewCard.cardIndex !== null
-                        ? deck.cards[modals.viewCard.cardIndex].front
-                        : ""
-                    }}
-                  </p>
+
+                  <div class="flex-grow flex items-center justify-center py-4">
+                    <p class="text-white text-xl text-center card-text">
+                      {{
+                        modals.viewCard.cardIndex !== null
+                          ? deck.cards[modals.viewCard.cardIndex].front
+                          : ""
+                      }}
+                    </p>
+                  </div>
+
                   <div class="flex flex-wrap gap-2 mt-3">
                     <span
                       v-for="(tag, tagIndex) in modals.viewCard.cardIndex !==
@@ -430,14 +508,20 @@
                       {{ tag }}
                     </span>
                   </div>
-                  <div class="mt-6">
+
+                  <div class="mt-8 flex justify-center">
                     <Button
                       @click="modals.viewCard.showAnswer = true"
-                      class="relative overflow-hidden group"
+                      class="relative overflow-hidden group px-8"
                     >
-                      <span class="relative z-10">See Answer</span>
                       <span
-                        class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        class="relative z-10 flex items-center pointer-events-none"
+                      >
+                        <FlipHorizontal class="mr-2 size-4" />
+                        Reveal Answer
+                      </span>
+                      <span
+                        class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                       ></span>
                     </Button>
                   </div>
@@ -446,19 +530,45 @@
 
               <!-- Back of card -->
               <div
-                class="absolute w-full h-full backface-hidden rotate-y-180 rounded-lg p-6 border border-neutral-800 bg-neutral-950 shadow-xl"
+                class="absolute w-full h-full backface-hidden rotate-y-180 rounded-lg p-6 border border-neutral-800 bg-gradient-to-b from-neutral-950 to-black shadow-xl"
               >
-                <div class="flex flex-col h-full">
-                  <h3 class="text-lg font-medium text-neutral-400 mb-4">
+                <div class="flex flex-col h-full relative">
+                  <div
+                    class="absolute top-0 right-0 w-20 h-20 text-neutral-800 opacity-20"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1"
+                      class="w-full h-full"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M12 16v-4"></path>
+                      <path d="M12 8h.01"></path>
+                    </svg>
+                  </div>
+
+                  <h3
+                    class="text-lg font-medium text-neutral-400 mb-6 flex items-center"
+                  >
+                    <span
+                      class="bg-gradient-to-r from-indigo-500 to-purple-500 size-2 rounded-full mr-2"
+                    ></span>
                     Answer
                   </h3>
-                  <p class="text-white text-xl flex-grow">
-                    {{
-                      modals.viewCard.cardIndex !== null
-                        ? deck.cards[modals.viewCard.cardIndex].back
-                        : ""
-                    }}
-                  </p>
+
+                  <div class="flex-grow flex items-center justify-center py-4">
+                    <p class="text-white text-xl text-center card-text">
+                      {{
+                        modals.viewCard.cardIndex !== null
+                          ? deck.cards[modals.viewCard.cardIndex].back
+                          : ""
+                      }}
+                    </p>
+                  </div>
+
                   <div class="flex flex-wrap gap-2 mt-3">
                     <span
                       v-for="(tag, tagIndex) in modals.viewCard.cardIndex !==
@@ -471,14 +581,20 @@
                       {{ tag }}
                     </span>
                   </div>
-                  <div class="mt-6">
+
+                  <div class="mt-8 flex justify-center">
                     <Button
                       @click="modals.viewCard.showAnswer = false"
-                      class="relative overflow-hidden group"
+                      class="relative overflow-hidden group px-8"
                     >
-                      <span class="relative z-10">See Question</span>
                       <span
-                        class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                        class="relative z-10 flex items-center pointer-events-none"
+                      >
+                        <FlipHorizontal class="mr-2 size-4" />
+                        Back to Question
+                      </span>
+                      <span
+                        class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
                       ></span>
                     </Button>
                   </div>
@@ -489,9 +605,32 @@
         </div>
 
         <DialogFooter>
-          <Button variant="secondary" @click="closeViewCardDialog">
-            Close
-          </Button>
+          <div class="flex w-full justify-between items-center">
+            <div class="flex gap-2">
+              <Button
+                size="sm"
+                variant="outline"
+                @click="goToPreviousCard"
+                :disabled="!hasPreviousCard"
+              >
+                <ChevronLeft class="size-4 mr-1" />
+                Previous
+              </Button>
+              <Button
+                size="sm"
+                variant="outline"
+                @click="goToNextCard"
+                :disabled="!hasNextCard"
+              >
+                Next
+                <ChevronRight class="size-4 ml-1" />
+              </Button>
+            </div>
+
+            <Button variant="secondary" @click="closeViewCardDialog">
+              Close
+            </Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -697,6 +836,9 @@ import {
   CheckCircle,
   AlertCircle,
   RefreshCw,
+  FlipHorizontal,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-vue-next";
 import decks from "@/data/decks.json";
 
@@ -726,6 +868,9 @@ export default {
     CheckCircle,
     AlertCircle,
     RefreshCw,
+    FlipHorizontal,
+    ChevronLeft,
+    ChevronRight,
   },
   data() {
     return {
@@ -830,6 +975,20 @@ export default {
         messages.length - 1
       );
       return messages[index];
+    },
+
+    hasPreviousCard() {
+      return (
+        this.modals.viewCard.cardIndex !== null &&
+        this.modals.viewCard.cardIndex > 0
+      );
+    },
+
+    hasNextCard() {
+      return (
+        this.modals.viewCard.cardIndex !== null &&
+        this.modals.viewCard.cardIndex < this.deck.cards.length - 1
+      );
     },
   },
   async mounted() {
@@ -1092,6 +1251,60 @@ export default {
       this.modals.viewCard.showAnswer = false;
       this.modals.viewCard.isOpen = false;
     },
+
+    getCardStatusClass(card) {
+      if (!card.nextReview) return "bg-neutral-600"; // No review scheduled
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const reviewDate = new Date(card.nextReview);
+      reviewDate.setHours(0, 0, 0, 0);
+
+      if (reviewDate < today) {
+        return "bg-red-500"; // Overdue
+      } else if (reviewDate.getTime() === today.getTime()) {
+        return "bg-green-500"; // Due today
+      } else {
+        return "bg-blue-500"; // Upcoming
+      }
+    },
+
+    formatNextReview(dateString) {
+      if (!dateString) return "Not scheduled";
+
+      const date = new Date(dateString);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      const reviewDate = new Date(date);
+      reviewDate.setHours(0, 0, 0, 0);
+
+      if (reviewDate.getTime() === today.getTime()) {
+        return "Today";
+      } else if (reviewDate.getTime() === tomorrow.getTime()) {
+        return "Tomorrow";
+      } else {
+        return date.toLocaleDateString();
+      }
+    },
+
+    goToNextCard() {
+      if (this.hasNextCard) {
+        this.modals.viewCard.cardIndex++;
+        this.modals.viewCard.showAnswer = false;
+      }
+    },
+
+    goToPreviousCard() {
+      if (this.hasPreviousCard) {
+        this.modals.viewCard.cardIndex--;
+        this.modals.viewCard.showAnswer = false;
+      }
+    },
   },
 };
 </script>
@@ -1117,6 +1330,31 @@ export default {
 
 .perspective-1000:hover .backface-hidden {
   box-shadow: 0 30px 60px -15px rgba(124, 58, 237, 0.3);
+}
+
+.card-content {
+  max-height: 100px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.card-text {
+  font-weight: 500;
+  line-height: 1.6;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.text-gradient {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.break-words {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
 }
 
 /* Confetti animation */

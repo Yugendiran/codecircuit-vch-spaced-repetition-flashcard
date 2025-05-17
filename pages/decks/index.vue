@@ -296,20 +296,46 @@
             class="relative min-h-[300px] w-full perspective-1000 mb-6"
           >
             <div
-              class="absolute w-full h-full transition-transform duration-500 transform-style-preserve-3d"
+              class="absolute w-full h-full transition-transform duration-700 transform-style-preserve-3d"
               :class="{ 'rotate-y-180': modals.study.showAnswer }"
             >
               <!-- Front of card -->
               <div
-                class="absolute w-full h-full backface-hidden rounded-lg p-6 border border-neutral-800 bg-neutral-900"
+                class="absolute w-full h-full backface-hidden rounded-lg p-6 border border-neutral-800 bg-gradient-to-b from-neutral-900 to-neutral-950 shadow-xl"
               >
-                <div class="flex flex-col h-full">
-                  <h3 class="text-lg font-medium text-neutral-400 mb-4">
+                <div class="flex flex-col h-full relative">
+                  <div
+                    class="absolute top-0 right-0 w-20 h-20 text-neutral-800 opacity-20"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1"
+                      class="w-full h-full"
+                    >
+                      <path
+                        d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"
+                      ></path>
+                    </svg>
+                  </div>
+
+                  <h3
+                    class="text-lg font-medium text-neutral-400 mb-6 flex items-center"
+                  >
+                    <span
+                      class="bg-gradient-to-r from-purple-500 to-indigo-500 size-2 rounded-full mr-2"
+                    ></span>
                     Question
                   </h3>
-                  <p class="text-white text-xl flex-grow">
-                    {{ getCurrentCard()?.front }}
-                  </p>
+
+                  <div class="flex-grow flex items-center justify-center py-4">
+                    <p class="text-white text-xl text-center card-text">
+                      {{ getCurrentCard()?.front }}
+                    </p>
+                  </div>
+
                   <div class="flex flex-wrap gap-2 mt-3">
                     <span
                       v-for="(tag, tagIndex) in getCurrentCard()?.tags"
@@ -319,25 +345,63 @@
                       {{ tag }}
                     </span>
                   </div>
-                  <div class="mt-6">
-                    <Button @click="modals.study.showAnswer = true"
-                      >Show Answer</Button
+
+                  <div class="mt-8 flex justify-center">
+                    <Button
+                      @click="modals.study.showAnswer = true"
+                      class="relative overflow-hidden group px-8"
                     >
+                      <span
+                        class="relative z-10 flex items-center pointer-events-none"
+                      >
+                        <FlipHorizontal class="mr-2 size-4" />
+                        Reveal Answer
+                      </span>
+                      <span
+                        class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                      ></span>
+                    </Button>
                   </div>
                 </div>
               </div>
 
               <!-- Back of card -->
               <div
-                class="absolute w-full h-full backface-hidden rotate-y-180 rounded-lg p-6 border border-neutral-800 bg-neutral-950"
+                class="absolute w-full h-full backface-hidden rotate-y-180 rounded-lg p-6 border border-neutral-800 bg-gradient-to-b from-neutral-950 to-black shadow-xl"
               >
-                <div class="flex flex-col h-full">
-                  <h3 class="text-lg font-medium text-neutral-400 mb-4">
+                <div class="flex flex-col h-full relative">
+                  <div
+                    class="absolute top-0 right-0 w-20 h-20 text-neutral-800 opacity-20"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1"
+                      class="w-full h-full"
+                    >
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M12 16v-4"></path>
+                      <path d="M12 8h.01"></path>
+                    </svg>
+                  </div>
+
+                  <h3
+                    class="text-lg font-medium text-neutral-400 mb-6 flex items-center"
+                  >
+                    <span
+                      class="bg-gradient-to-r from-indigo-500 to-purple-500 size-2 rounded-full mr-2"
+                    ></span>
                     Answer
                   </h3>
-                  <p class="text-white text-xl flex-grow">
-                    {{ getCurrentCard()?.back }}
-                  </p>
+
+                  <div class="flex-grow flex items-center justify-center py-4">
+                    <p class="text-white text-xl text-center card-text">
+                      {{ getCurrentCard()?.back }}
+                    </p>
+                  </div>
+
                   <div class="flex flex-wrap gap-2 mt-3">
                     <span
                       v-for="(tag, tagIndex) in getCurrentCard()?.tags"
@@ -347,10 +411,22 @@
                       {{ tag }}
                     </span>
                   </div>
-                  <div class="mt-6">
-                    <Button @click="modals.study.showAnswer = false"
-                      >Show Question</Button
+
+                  <div class="mt-8 flex justify-center">
+                    <Button
+                      @click="modals.study.showAnswer = false"
+                      class="relative overflow-hidden group px-8"
                     >
+                      <span
+                        class="relative z-10 flex items-center pointer-events-none"
+                      >
+                        <FlipHorizontal class="mr-2 size-4" />
+                        Back to Question
+                      </span>
+                      <span
+                        class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                      ></span>
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -368,8 +444,12 @@
               variant="outline"
               @click="prevCard()"
               :disabled="modals.study.currentCardIndex <= 0"
+              class="flex items-center group"
             >
-              <ChevronLeft class="mr-2 h-4 w-4" /> Previous
+              <ChevronLeft
+                class="mr-2 h-4 w-4 group-hover:text-purple-400 transition-colors"
+              />
+              Previous
             </Button>
 
             <Button
@@ -380,8 +460,12 @@
                 modals.study.currentCardIndex >=
                   modals.study.currentDeck.cards.length - 1
               "
+              class="flex items-center group"
             >
-              Next <ChevronRight class="ml-2 h-4 w-4" />
+              Next
+              <ChevronRight
+                class="ml-2 h-4 w-4 group-hover:text-purple-400 transition-colors"
+              />
             </Button>
           </div>
         </div>
@@ -397,7 +481,13 @@
 </template>
 
 <script>
-import { Plus, Trash, ChevronLeft, ChevronRight } from "lucide-vue-next";
+import {
+  Plus,
+  Trash,
+  ChevronLeft,
+  ChevronRight,
+  FlipHorizontal,
+} from "lucide-vue-next";
 import decks from "@/data/decks.json";
 
 export default {
@@ -406,6 +496,7 @@ export default {
     Trash,
     ChevronLeft,
     ChevronRight,
+    FlipHorizontal,
   },
   data() {
     return {
@@ -611,10 +702,22 @@ export default {
 
 .backface-hidden {
   backface-visibility: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+.perspective-1000:hover .backface-hidden {
+  box-shadow: 0 30px 60px -15px rgba(124, 58, 237, 0.3);
+}
+
+.card-text {
+  font-weight: 500;
+  line-height: 1.6;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .bg-grid-pattern {
