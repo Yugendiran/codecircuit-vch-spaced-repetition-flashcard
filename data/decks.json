@@ -8,7 +8,9 @@
         "id": 1,
         "front": "Test",
         "back": "Test",
-        "tags": ["test", "test2"]
+        "tags": ["test", "test2"],
+        "nextReview": "2025-05-17",
+        "repetitions": 2
       }
     ]
   }
