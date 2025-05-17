@@ -1,5 +1,27 @@
 <template>
   <div v-if="deck" class="container mx-auto">
+    <!-- Confetti overlay -->
+    <div
+      v-if="confetti.active"
+      class="fixed inset-0 pointer-events-none overflow-hidden"
+      style="z-index: 100"
+    >
+      <div
+        v-for="(particle, index) in confetti.particles"
+        :key="index"
+        class="absolute rounded-md confetti"
+        :style="{
+          left: `${particle.x}%`,
+          top: `${particle.y}%`,
+          width: `${particle.size}px`,
+          height: `${particle.size}px`,
+          backgroundColor: particle.color,
+          transform: `rotate(${particle.rotation}deg)`,
+          animationDuration: `${3000 / particle.speed}ms`,
+        }"
+      ></div>
+    </div>
+
     <div class="flex justify-between">
       <div>
         <h1 class="text-2xl font-bold text-white">{{ deck.name }}</h1>
@@ -25,9 +47,24 @@
           variant="outline"
           @click="generateCards"
           :disabled="isGenerating"
+          class="relative overflow-hidden group"
         >
-          <span class="text-purple-400 mr-2">✨</span>
-          {{ isGenerating ? "Generating..." : "Generate" }}
+          <span
+            v-if="!isGenerating"
+            class="text-purple-400 mr-2 group-hover:animate-pulse"
+            >✨</span
+          >
+          <span
+            v-else
+            class="absolute inset-0 bg-purple-500/10 animate-pulse"
+          ></span>
+          <Loader2 v-if="isGenerating" class="animate-spin mr-2 size-4" />
+          <span class="relative z-10">{{
+            isGenerating ? "Generating..." : "Generate"
+          }}</span>
+          <span
+            class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          ></span>
         </Button>
 
         <Button variant="secondary"> Review Deck <Badge>4</Badge> </Button>
@@ -79,9 +116,24 @@
             variant="outline"
             @click="generateCards"
             :disabled="isGenerating"
+            class="relative overflow-hidden group"
           >
-            <span class="text-purple-400 mr-2">✨</span>
-            {{ isGenerating ? "Generating..." : "Generate with AI" }}
+            <span
+              v-if="!isGenerating"
+              class="text-purple-400 mr-2 group-hover:animate-pulse"
+              >✨</span
+            >
+            <span
+              v-else
+              class="absolute inset-0 bg-purple-500/10 animate-pulse"
+            ></span>
+            <Loader2 v-if="isGenerating" class="animate-spin mr-2 size-4" />
+            <span class="relative z-10">{{
+              isGenerating ? "Generating..." : "Generate with AI"
+            }}</span>
+            <span
+              class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            ></span>
           </Button>
 
           <!-- <Button variant="outline"> </Button> -->
@@ -113,7 +165,8 @@
           <div
             v-for="(card, index) in filteredCards"
             :key="index"
-            class="bg-neutral-900 rounded-xl p-6 border border-neutral-800"
+            class="bg-neutral-900 rounded-xl p-6 border border-neutral-800 transition-all duration-500"
+            :class="{ 'card-highlight': card.isNew }"
           >
             <p class="text-white font-medium mb-4">{{ card.front }}</p>
             <div class="flex items-center gap-2 mt-4 flex-wrap">
@@ -347,12 +400,12 @@
         <div class="py-4">
           <div class="relative min-h-[300px] w-full perspective-1000">
             <div
-              class="absolute w-full h-full transition-transform duration-500 transform-style-preserve-3d"
+              class="absolute w-full h-full transition-transform duration-700 transform-style-preserve-3d"
               :class="{ 'rotate-y-180': modals.viewCard.showAnswer }"
             >
               <!-- Front of card -->
               <div
-                class="absolute w-full h-full backface-hidden rounded-lg p-6 border border-neutral-800 bg-neutral-900"
+                class="absolute w-full h-full backface-hidden rounded-lg p-6 border border-neutral-800 bg-neutral-900 shadow-xl"
               >
                 <div class="flex flex-col h-full">
                   <h3 class="text-lg font-medium text-neutral-400 mb-4">
@@ -378,8 +431,14 @@
                     </span>
                   </div>
                   <div class="mt-6">
-                    <Button @click="modals.viewCard.showAnswer = true">
-                      See Answer
+                    <Button
+                      @click="modals.viewCard.showAnswer = true"
+                      class="relative overflow-hidden group"
+                    >
+                      <span class="relative z-10">See Answer</span>
+                      <span
+                        class="absolute inset-0 bg-gradient-to-r from-purple-600/20 to-indigo-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      ></span>
                     </Button>
                   </div>
                 </div>
@@ -387,7 +446,7 @@
 
               <!-- Back of card -->
               <div
-                class="absolute w-full h-full backface-hidden rotate-y-180 rounded-lg p-6 border border-neutral-800 bg-neutral-950"
+                class="absolute w-full h-full backface-hidden rotate-y-180 rounded-lg p-6 border border-neutral-800 bg-neutral-950 shadow-xl"
               >
                 <div class="flex flex-col h-full">
                   <h3 class="text-lg font-medium text-neutral-400 mb-4">
@@ -413,8 +472,14 @@
                     </span>
                   </div>
                   <div class="mt-6">
-                    <Button @click="modals.viewCard.showAnswer = false">
-                      See Question
+                    <Button
+                      @click="modals.viewCard.showAnswer = false"
+                      class="relative overflow-hidden group"
+                    >
+                      <span class="relative z-10">See Question</span>
+                      <span
+                        class="absolute inset-0 bg-gradient-to-r from-indigo-600/20 to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      ></span>
                     </Button>
                   </div>
                 </div>
@@ -430,6 +495,191 @@
         </DialogFooter>
       </DialogContent>
     </Dialog>
+
+    <Dialog v-model:open="modals.aiGeneration.isOpen">
+      <DialogContent class="max-w-2xl">
+        <DialogHeader class="border-b border-neutral-800 pb-4">
+          <DialogTitle>{{ getAIGenerationTitle }}</DialogTitle>
+        </DialogHeader>
+
+        <div class="py-4">
+          <div v-if="modals.aiGeneration.status === 'generating'">
+            <p class="text-neutral-200 flex items-center gap-2 mb-4">
+              <span class="relative inline-flex">
+                <Loader2 class="animate-spin size-5 text-purple-400" />
+                <span
+                  class="absolute inset-0 animate-ping opacity-75 rounded-full bg-purple-400 blur-sm"
+                ></span>
+              </span>
+              <span class="text-lg"
+                >AI is crafting flashcards for your deck</span
+              >
+              <span class="loading-dots ml-1">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+              </span>
+            </p>
+
+            <div class="mt-8 space-y-6">
+              <ProgressBar :value="modals.aiGeneration.progress" />
+
+              <div class="text-center space-y-2">
+                <p class="text-neutral-300 text-sm">
+                  {{ getLoadingMessage }}
+                </p>
+                <div class="grid grid-cols-3 gap-3 mt-6">
+                  <div v-for="i in 3" :key="i" class="pulse-card">
+                    <div
+                      class="bg-neutral-800/50 animate-pulse h-20 rounded-lg"
+                    ></div>
+                    <div
+                      class="mt-2 bg-neutral-800/50 animate-pulse h-3 rounded-full w-3/4"
+                    ></div>
+                    <div
+                      class="mt-2 bg-neutral-800/50 animate-pulse h-3 rounded-full w-1/2"
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-else-if="modals.aiGeneration.status === 'complete'">
+            <p class="text-green-400 flex items-center gap-2 mb-4">
+              <span class="relative inline-flex">
+                <CheckCircle class="size-5" />
+                <span class="absolute inset-0 animate-success-ring"></span>
+              </span>
+              <span class="text-lg"
+                >Successfully generated
+                {{ modals.aiGeneration.cards.length }} cards!</span
+              >
+            </p>
+
+            <div class="max-h-[400px] overflow-y-auto pr-2">
+              <TransitionGroup name="card" tag="div" class="grid gap-4">
+                <div
+                  v-for="(card, index) in modals.aiGeneration.cards"
+                  :key="index"
+                  class="bg-neutral-900 rounded-xl p-4 border border-purple-800/30 shadow-sm shadow-purple-500/10 card-appear"
+                  :style="{ '--delay': `${index * 150}ms` }"
+                >
+                  <div class="flex justify-between">
+                    <h3 class="font-medium text-white">Card {{ index + 1 }}</h3>
+                    <Badge class="bg-purple-500/20 text-purple-300"
+                      >AI Generated</Badge
+                    >
+                  </div>
+                  <div class="mt-3 grid grid-cols-2 gap-4">
+                    <div class="bg-neutral-800/50 p-3 rounded-md">
+                      <p class="text-neutral-400 text-xs mb-1">Front</p>
+                      <p class="text-white">{{ card.front }}</p>
+                    </div>
+                    <div class="bg-neutral-800/50 p-3 rounded-md">
+                      <p class="text-neutral-400 text-xs mb-1">Back</p>
+                      <p class="text-white">{{ card.back }}</p>
+                    </div>
+                  </div>
+                  <div class="flex flex-wrap gap-2 mt-3">
+                    <span
+                      v-for="(tag, tagIndex) in card.tags"
+                      :key="tagIndex"
+                      class="px-2 py-1 bg-purple-900/30 text-purple-300 text-xs rounded-md"
+                    >
+                      {{ tag }}
+                    </span>
+                  </div>
+                </div>
+              </TransitionGroup>
+            </div>
+          </div>
+
+          <div v-else-if="modals.aiGeneration.status === 'error'">
+            <p class="text-red-400 flex items-center gap-2 mb-4">
+              <span class="relative inline-flex">
+                <AlertCircle class="size-5" />
+                <span class="absolute inset-0 animate-error-pulse"></span>
+              </span>
+              <span class="text-lg">There was an error generating cards</span>
+            </p>
+
+            <div
+              class="bg-red-900/20 border border-red-700/30 rounded-lg p-4 mt-4"
+            >
+              <p class="text-neutral-200 mb-3">
+                The AI service couldn't generate cards. This could be due to:
+              </p>
+              <ul class="text-neutral-300 list-disc pl-5 space-y-1 text-sm">
+                <li>Network connectivity issues</li>
+                <li>The AI service being temporarily unavailable</li>
+                <li>Insufficient information in your deck description</li>
+              </ul>
+            </div>
+
+            <div class="mt-6 flex justify-center">
+              <Button
+                class="error-shake"
+                variant="outline"
+                @click="generateCards"
+              >
+                <RefreshCw class="size-4 mr-2" />
+                Try Again
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button
+            variant="secondary"
+            @click="modals.aiGeneration.isOpen = false"
+          >
+            Cancel
+          </Button>
+          <Button
+            @click="confirmGeneratedCards()"
+            :disabled="modals.aiGeneration.status !== 'complete'"
+            class="relative overflow-hidden"
+          >
+            <span
+              v-if="modals.aiGeneration.status === 'complete'"
+              class="z-10 relative"
+            >
+              <CheckCircle class="size-4 mr-2 inline-block" />
+              Add to Deck
+            </span>
+            <span v-else>Confirm</span>
+            <span
+              class="absolute inset-0 bg-gradient-to-r from-purple-600 to-indigo-600 opacity-0 transition-opacity duration-300 hover:opacity-20"
+            ></span>
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+
+    <Transition name="toast">
+      <div
+        v-if="showGenerationSuccess"
+        class="fixed bottom-4 right-4 bg-neutral-800 border border-green-500/50 text-white px-4 py-3 rounded-lg shadow-lg flex items-center gap-3"
+      >
+        <CheckCircle class="text-green-400 size-5" />
+        <div>
+          <p class="font-medium">Success!</p>
+          <p class="text-sm text-neutral-300">
+            Cards have been added to your deck.
+          </p>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          @click="showGenerationSuccess = false"
+          class="ml-2"
+        >
+          <X class="size-4" />
+        </Button>
+      </div>
+    </Transition>
   </div>
 </template>
 
@@ -443,8 +693,24 @@ import {
   Inbox,
   SearchX,
   X,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  RefreshCw,
 } from "lucide-vue-next";
 import decks from "@/data/decks.json";
+
+// Helper function for generating random colors
+function getRandomColor() {
+  const colors = [
+    "#8b5cf6", // Purple
+    "#6366f1", // Indigo
+    "#ec4899", // Pink
+    "#14b8a6", // Teal
+    "#a855f7", // Purple
+  ];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
 
 export default {
   components: {
@@ -456,12 +722,31 @@ export default {
     Inbox,
     SearchX,
     X,
+    Loader2,
+    CheckCircle,
+    AlertCircle,
+    RefreshCw,
   },
   data() {
     return {
       search: "",
       deck: null,
       isGenerating: false,
+      showGenerationSuccess: false,
+      generatedCards: [],
+      confetti: {
+        active: false,
+        particles: Array(50)
+          .fill()
+          .map(() => ({
+            x: Math.random() * 100,
+            y: -20 - Math.random() * 100,
+            size: 5 + Math.random() * 10,
+            color: getRandomColor(),
+            rotation: Math.random() * 360,
+            speed: 1 + Math.random() * 5,
+          })),
+      },
       modals: {
         createCard: {
           isOpen: false,
@@ -491,6 +776,12 @@ export default {
           cardIndex: null,
           showAnswer: false,
         },
+        aiGeneration: {
+          isOpen: false,
+          progress: 0,
+          cards: [],
+          status: "idle", // idle, generating, complete, error
+        },
       },
     };
   },
@@ -507,6 +798,38 @@ export default {
           card.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
         );
       });
+    },
+
+    getAIGenerationTitle() {
+      switch (this.modals.aiGeneration.status) {
+        case "generating":
+          return "Generating Cards with AI";
+        case "complete":
+          return "Generated Cards";
+        case "error":
+          return "Generation Error";
+        default:
+          return "Generate Cards";
+      }
+    },
+
+    getLoadingMessage() {
+      const messages = [
+        "Analyzing your deck content...",
+        "Creating knowledge connections...",
+        "Generating balanced questions...",
+        "Crafting clear answers...",
+        "Refining flashcard quality...",
+        "Applying spaced repetition principles...",
+        "Almost done creating your cards...",
+      ];
+
+      // Return message based on progress
+      const index = Math.min(
+        Math.floor(this.modals.aiGeneration.progress / 15),
+        messages.length - 1
+      );
+      return messages[index];
     },
   },
   async mounted() {
@@ -527,6 +850,17 @@ export default {
       if (!this.deck) return;
 
       this.isGenerating = true;
+      this.modals.aiGeneration.isOpen = true;
+      this.modals.aiGeneration.status = "generating";
+      this.modals.aiGeneration.progress = 0;
+      this.modals.aiGeneration.cards = [];
+
+      // Animation progress simulation
+      const progressInterval = setInterval(() => {
+        if (this.modals.aiGeneration.progress < 90) {
+          this.modals.aiGeneration.progress += Math.random() * 10;
+        }
+      }, 300);
 
       try {
         const response = await $fetch("/api/generate-cards", {
@@ -537,22 +871,98 @@ export default {
           },
         });
 
+        // Stop the progress interval immediately
+        clearInterval(progressInterval);
+
+        // Process the response
         if (response && response.content && response.content.length > 0) {
-          const cards = await response.content.map((card) => ({
+          const cards = response.content.map((card) => ({
             ...card,
             id: this.deck.cards.length + 1,
+            isNew: true, // Mark as new for animation
           }));
 
-          this.deck.cards = [...this.deck.cards, ...cards];
+          this.modals.aiGeneration.cards = cards;
+
+          // Complete the progress bar animation quickly
+          const completeProgress = () => {
+            if (this.modals.aiGeneration.progress < 100) {
+              this.modals.aiGeneration.progress +=
+                (100 - this.modals.aiGeneration.progress) / 2;
+              if (this.modals.aiGeneration.progress > 99.5) {
+                this.modals.aiGeneration.progress = 100;
+                // Update the status immediately after progress reaches 100%
+                this.modals.aiGeneration.status = "complete";
+                return;
+              }
+              requestAnimationFrame(completeProgress);
+            }
+          };
+
+          completeProgress();
+        } else {
+          // Handle empty response
+          this.modals.aiGeneration.status = "error";
         }
       } catch (error) {
+        clearInterval(progressInterval);
         console.error("Error generating cards:", error);
+        this.modals.aiGeneration.status = "error";
       } finally {
         this.isGenerating = false;
-
-        console.log(this.deck.cards);
       }
     },
+
+    confirmGeneratedCards() {
+      if (this.modals.aiGeneration.cards.length > 0) {
+        // Add the generated cards to the deck
+        this.deck.cards = [
+          ...this.deck.cards,
+          ...this.modals.aiGeneration.cards,
+        ];
+
+        // Show success message and confetti
+        this.showGenerationSuccess = true;
+        this.triggerConfetti();
+
+        setTimeout(() => {
+          this.showGenerationSuccess = false;
+        }, 3000);
+
+        // Remove the isNew flag after animation completes
+        setTimeout(() => {
+          this.deck.cards.forEach((card) => {
+            if (card.isNew) card.isNew = false;
+          });
+        }, 5000);
+
+        // Close the dialog
+        this.modals.aiGeneration.isOpen = false;
+        this.modals.aiGeneration.status = "idle";
+      }
+    },
+
+    triggerConfetti() {
+      this.confetti.active = true;
+
+      // Reset particles to start position
+      this.confetti.particles = Array(50)
+        .fill()
+        .map(() => ({
+          x: Math.random() * 100,
+          y: -20 - Math.random() * 100,
+          size: 5 + Math.random() * 10,
+          color: getRandomColor(),
+          rotation: Math.random() * 360,
+          speed: 1 + Math.random() * 5,
+        }));
+
+      // Disable after animation completes
+      setTimeout(() => {
+        this.confetti.active = false;
+      }, 3000);
+    },
+
     createCard() {
       let errors = 0;
 
@@ -697,9 +1107,254 @@ export default {
 
 .backface-hidden {
   backface-visibility: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+.perspective-1000:hover .backface-hidden {
+  box-shadow: 0 30px 60px -15px rgba(124, 58, 237, 0.3);
+}
+
+/* Confetti animation */
+.confetti {
+  animation: fall-rotate linear forwards;
+}
+
+@keyframes fall-rotate {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* AI Generation animations */
+.card-enter-active,
+.card-leave-active {
+  transition: all 0.5s cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+.card-enter-from,
+.card-leave-to {
+  opacity: 0;
+  transform: translateY(30px) scale(0.9);
+  filter: blur(5px);
+}
+
+.card-appear {
+  animation: card-appear 0.8s forwards;
+  animation-delay: var(--delay, 0ms);
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+@keyframes card-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    box-shadow: 0 0 0 rgba(124, 58, 237, 0);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 25px -5px rgba(124, 58, 237, 0.3);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    box-shadow: 0 10px 20px -5px rgba(124, 58, 237, 0.2);
+  }
+}
+
+/* Fix for Vue transition group */
+.card-move {
+  transition: transform 0.5s ease-in-out;
+}
+
+.card-highlight {
+  animation: card-highlight 3s ease;
+  border-color: rgba(124, 58, 237, 0.5);
+  box-shadow: 0 0 15px rgba(124, 58, 237, 0.25);
+}
+
+@keyframes card-highlight {
+  0% {
+    transform: scale(1);
+    border-color: rgba(124, 58, 237, 0.5);
+  }
+  10% {
+    transform: scale(1.03);
+    border-color: rgba(124, 58, 237, 0.8);
+    box-shadow: 0 0 20px rgba(124, 58, 237, 0.4);
+  }
+  20% {
+    transform: scale(1);
+  }
+  100% {
+    border-color: rgba(124, 58, 237, 0.1);
+    box-shadow: 0 0 15px rgba(124, 58, 237, 0);
+  }
+}
+
+.generation-success {
+  animation: pulse-success 2s ease-in-out;
+}
+
+@keyframes pulse-success {
+  0%,
+  100% {
+    background-color: transparent;
+  }
+  50% {
+    background-color: rgba(124, 58, 237, 0.1);
+  }
+}
+
+/* Toast animation */
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.5s ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+/* Loading animation */
+.loading-dots {
+  display: inline-flex;
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  margin: 0 2px;
+  background-color: currentColor;
+  animation: dot-flashing 1s infinite alternate;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dot-flashing {
+  0% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.pulse-card {
+  animation: pulse-shadow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: calc(var(--i, 0) * 0.5s);
+}
+
+.pulse-card:nth-child(1) {
+  --i: 0;
+}
+
+.pulse-card:nth-child(2) {
+  --i: 1;
+}
+
+.pulse-card:nth-child(3) {
+  --i: 2;
+}
+
+@keyframes pulse-shadow {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.02);
+    filter: brightness(1.15);
+  }
+}
+
+@keyframes success-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+    transform: scale(0.95);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(74, 222, 128, 0);
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+    transform: scale(0.95);
+  }
+}
+
+.animate-success-ring {
+  animation: success-ring 2s infinite cubic-bezier(0.66, 0, 0.34, 1);
+}
+
+@keyframes error-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.7);
+    transform: scale(0.95);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(248, 113, 113, 0);
+    transform: scale(1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(248, 113, 113, 0);
+    transform: scale(0.95);
+  }
+}
+
+.animate-error-pulse {
+  animation: error-pulse 2s infinite cubic-bezier(0.66, 0, 0.34, 1);
+}
+
+.error-shake {
+  animation: error-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes error-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-3px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+.error-shake:hover {
+  animation: none;
 }
 </style>
