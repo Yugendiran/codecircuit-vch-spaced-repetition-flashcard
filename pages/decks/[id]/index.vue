@@ -59,6 +59,7 @@
                 size="sm"
                 variant="outline"
                 class="flex items-center gap-2"
+                @click="openViewCardDialog(index)"
               >
                 <Eye class="size-3" />
                 View
@@ -274,6 +275,75 @@
         </DialogFooter>
       </DialogContent>
     </Dialog>
+
+    <Dialog v-model:open="modals.viewCard.isOpen">
+      <DialogContent>
+        <DialogHeader class="border-b border-neutral-800 pb-4">
+          <DialogTitle>View Card</DialogTitle>
+        </DialogHeader>
+
+        <div class="py-4">
+          <div class="relative min-h-[300px] w-full perspective-1000">
+            <div
+              class="absolute w-full h-full transition-transform duration-500 transform-style-preserve-3d"
+              :class="{ 'rotate-y-180': modals.viewCard.showAnswer }"
+            >
+              <!-- Front of card -->
+              <div
+                class="absolute w-full h-full backface-hidden rounded-lg p-6 border border-neutral-800 bg-neutral-900"
+              >
+                <div class="flex flex-col h-full">
+                  <h3 class="text-lg font-medium text-neutral-400 mb-4">
+                    Question
+                  </h3>
+                  <p class="text-white text-xl flex-grow">
+                    {{
+                      modals.viewCard.cardIndex !== null
+                        ? deck.cards[modals.viewCard.cardIndex].front
+                        : ""
+                    }}
+                  </p>
+                  <div class="mt-6">
+                    <Button @click="modals.viewCard.showAnswer = true">
+                      See Answer
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back of card -->
+              <div
+                class="absolute w-full h-full backface-hidden rotate-y-180 rounded-lg p-6 border border-neutral-800 bg-neutral-950"
+              >
+                <div class="flex flex-col h-full">
+                  <h3 class="text-lg font-medium text-neutral-400 mb-4">
+                    Answer
+                  </h3>
+                  <p class="text-white text-xl flex-grow">
+                    {{
+                      modals.viewCard.cardIndex !== null
+                        ? deck.cards[modals.viewCard.cardIndex].back
+                        : ""
+                    }}
+                  </p>
+                  <div class="mt-6">
+                    <Button @click="modals.viewCard.showAnswer = false">
+                      See Question
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button variant="secondary" @click="closeViewCardDialog">
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 
@@ -316,6 +386,11 @@ export default {
         deleteCard: {
           isOpen: false,
           cardIndex: null,
+        },
+        viewCard: {
+          isOpen: false,
+          cardIndex: null,
+          showAnswer: false,
         },
       },
     };
@@ -445,6 +520,36 @@ export default {
         this.modals.editCard.isOpen = false;
       }
     },
+
+    openViewCardDialog(index) {
+      this.modals.viewCard.cardIndex = index;
+      this.modals.viewCard.showAnswer = false;
+      this.modals.viewCard.isOpen = true;
+    },
+
+    closeViewCardDialog() {
+      this.modals.viewCard.cardIndex = null;
+      this.modals.viewCard.showAnswer = false;
+      this.modals.viewCard.isOpen = false;
+    },
   },
 };
 </script>
+
+<style scoped>
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+</style>
