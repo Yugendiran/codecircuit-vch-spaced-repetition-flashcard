@@ -9,12 +9,12 @@
         "back": "Vasco da Gama",
         "tags": ["Exploration", "History", "Portugal"],
         "nextReview": "2023-05-17",
-        "repetitions": 0,
+        "repetitions": 1,
         "id": 1,
-        "isNew": true,
+        "isNew": false,
         "easiness": 2.5,
-        "interval": 0,
-        "reviewHistory": []
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 4 }]
       },
       {
         "front": "What was the name of the ship that Christopher Columbus used on his first voyage across the Atlantic?",
@@ -128,13 +128,245 @@
         "front": "Which invention during the Age of Exploration greatly improved navigation at sea?",
         "back": "The Astrolabe",
         "tags": ["Innovation", "Navigation", "History"],
-        "nextReview": "2023-05-14",
-        "repetitions": 0,
+        "nextReview": "2023-05-19",
+        "repetitions": 1,
         "id": 10,
         "isNew": false,
         "easiness": 2.5,
-        "interval": 0,
-        "reviewHistory": []
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 4 }]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "Computer Science",
+    "description": "Core concepts and principles of computer science and programming.",
+    "cards": [
+      {
+        "front": "What data structure uses LIFO (Last In, First Out) principle?",
+        "back": "Stack",
+        "tags": ["Data Structures", "Algorithms", "Basics"],
+        "nextReview": "2023-06-10",
+        "repetitions": 5,
+        "id": 11,
+        "isNew": false,
+        "easiness": 2.8,
+        "interval": 45,
+        "reviewHistory": [
+          { "date": "2023-03-01", "quality": 4 },
+          { "date": "2023-03-02", "quality": 5 },
+          { "date": "2023-03-08", "quality": 4 },
+          { "date": "2023-03-20", "quality": 5 },
+          { "date": "2023-04-26", "quality": 5 }
+        ]
+      },
+      {
+        "front": "What does the 'O' in Big O Notation represent?",
+        "back": "Order of magnitude - the upper bound growth rate of an algorithm",
+        "tags": ["Algorithms", "Time Complexity", "Computer Science"],
+        "nextReview": "2023-05-28",
+        "repetitions": 3,
+        "id": 12,
+        "isNew": false,
+        "easiness": 2.1,
+        "interval": 10,
+        "reviewHistory": [
+          { "date": "2023-05-01", "quality": 2 },
+          { "date": "2023-05-02", "quality": 3 },
+          { "date": "2023-05-18", "quality": 3 }
+        ]
+      },
+      {
+        "front": "What is recursion in programming?",
+        "back": "A technique where a function calls itself to solve a problem",
+        "tags": ["Programming", "Algorithms", "Functions"],
+        "nextReview": "2023-07-10",
+        "repetitions": 6,
+        "id": 13,
+        "isNew": false,
+        "easiness": 3.1,
+        "interval": 76,
+        "reviewHistory": [
+          { "date": "2023-01-05", "quality": 4 },
+          { "date": "2023-01-06", "quality": 4 },
+          { "date": "2023-01-12", "quality": 5 },
+          { "date": "2023-01-24", "quality": 5 },
+          { "date": "2023-03-01", "quality": 5 },
+          { "date": "2023-04-25", "quality": 5 }
+        ]
+      },
+      {
+        "front": "What is the difference between a compiled and interpreted language?",
+        "back": "Compiled languages convert code to machine code before execution, while interpreted languages translate code line by line during execution",
+        "tags": ["Programming Languages", "Compilers", "Interpreters"],
+        "nextReview": "2023-05-26",
+        "repetitions": 2,
+        "id": 14,
+        "isNew": false,
+        "easiness": 2.4,
+        "interval": 8,
+        "reviewHistory": [
+          { "date": "2023-05-10", "quality": 3 },
+          { "date": "2023-05-18", "quality": 4 }
+        ]
+      },
+      {
+        "front": "What is polymorphism in OOP?",
+        "back": "The ability of different classes to respond to the same method in different ways",
+        "tags": ["OOP", "Programming", "Computer Science"],
+        "nextReview": "2023-05-19",
+        "repetitions": 1,
+        "id": 15,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 4 }]
+      },
+      {
+        "front": "What is a memory leak?",
+        "back": "Memory that is no longer needed is not released, causing the program to consume more memory over time",
+        "tags": ["Memory Management", "Programming", "Debugging"],
+        "nextReview": "2023-05-19",
+        "repetitions": 1,
+        "id": 22,
+        "isNew": false,
+        "easiness": 2.3,
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 3 }]
+      },
+      {
+        "front": "What is the difference between HTTP and HTTPS?",
+        "back": "HTTPS is encrypted using SSL/TLS while HTTP is not encrypted",
+        "tags": ["Networking", "Web", "Security"],
+        "nextReview": "2023-05-19",
+        "repetitions": 1,
+        "id": 23,
+        "isNew": false,
+        "easiness": 2.6,
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 5 }]
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "Mathematics",
+    "description": "Essential mathematical concepts, formulas, and problem-solving techniques.",
+    "cards": [
+      {
+        "front": "What is the formula for the area of a circle?",
+        "back": "A = πr²",
+        "tags": ["Geometry", "Formulas", "Basics"],
+        "nextReview": "2023-07-05",
+        "repetitions": 4,
+        "id": 16,
+        "isNew": false,
+        "easiness": 2.7,
+        "interval": 32,
+        "reviewHistory": [
+          { "date": "2023-02-14", "quality": 5 },
+          { "date": "2023-02-15", "quality": 5 },
+          { "date": "2023-02-21", "quality": 5 },
+          { "date": "2023-04-03", "quality": 4 }
+        ]
+      },
+      {
+        "front": "What is the Pythagorean theorem?",
+        "back": "In a right triangle, the square of the length of the hypotenuse equals the sum of the squares of the other two sides: a² + b² = c²",
+        "tags": ["Geometry", "Theorems", "Triangles"],
+        "nextReview": "2023-05-25",
+        "repetitions": 3,
+        "id": 17,
+        "isNew": false,
+        "easiness": 2.3,
+        "interval": 7,
+        "reviewHistory": [
+          { "date": "2023-05-11", "quality": 3 },
+          { "date": "2023-05-12", "quality": 4 },
+          { "date": "2023-05-18", "quality": 3 }
+        ]
+      },
+      {
+        "front": "What is a derivative in calculus?",
+        "back": "The instantaneous rate of change of a function with respect to one of its variables",
+        "tags": ["Calculus", "Functions", "Rate of Change"],
+        "nextReview": "2023-05-19",
+        "repetitions": 1,
+        "id": 18,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 3 }]
+      },
+      {
+        "front": "What is the difference between mean, median, and mode?",
+        "back": "Mean is the average of values, median is the middle value, and mode is the most frequently occurring value",
+        "tags": ["Statistics", "Data Analysis", "Basics"],
+        "nextReview": "2023-05-19",
+        "repetitions": 1,
+        "id": 19,
+        "isNew": false,
+        "easiness": 2.6,
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 4 }]
+      },
+      {
+        "front": "What is a prime number?",
+        "back": "A natural number greater than 1 that cannot be formed by multiplying two smaller natural numbers",
+        "tags": ["Number Theory", "Primes", "Integers"],
+        "nextReview": "2023-06-20",
+        "repetitions": 5,
+        "id": 20,
+        "isNew": false,
+        "easiness": 2.9,
+        "interval": 33,
+        "reviewHistory": [
+          { "date": "2023-03-01", "quality": 5 },
+          { "date": "2023-03-02", "quality": 5 },
+          { "date": "2023-03-08", "quality": 5 },
+          { "date": "2023-03-19", "quality": 5 },
+          { "date": "2023-05-18", "quality": 5 }
+        ]
+      },
+      {
+        "front": "What is a logarithm?",
+        "back": "A logarithm is the power to which a number must be raised to get another number",
+        "tags": ["Algebra", "Functions", "Exponents"],
+        "nextReview": "2023-05-28",
+        "repetitions": 2,
+        "id": 21,
+        "isNew": false,
+        "easiness": 2.2,
+        "interval": 10,
+        "reviewHistory": [
+          { "date": "2023-05-10", "quality": 2 },
+          { "date": "2023-05-18", "quality": 3 }
+        ]
+      },
+      {
+        "front": "What is the formula for the volume of a sphere?",
+        "back": "V = (4/3)πr³",
+        "tags": ["Geometry", "Volume", "3D Shapes"],
+        "nextReview": "2023-05-19",
+        "repetitions": 1,
+        "id": 24,
+        "isNew": false,
+        "easiness": 2.5,
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 4 }]
+      },
+      {
+        "front": "What is a complex number?",
+        "back": "A number that can be expressed in the form a + bi, where a and b are real numbers and i is the imaginary unit",
+        "tags": ["Complex Numbers", "Algebra", "Imaginary Numbers"],
+        "nextReview": "2023-05-19",
+        "repetitions": 1,
+        "id": 25,
+        "isNew": false,
+        "easiness": 2.1,
+        "interval": 1,
+        "reviewHistory": [{ "date": "2023-05-18", "quality": 2 }]
       }
     ]
   }

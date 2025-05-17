@@ -8,6 +8,13 @@ export default defineNuxtConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ["apexcharts"],
+    },
+  },
+
+  build: {
+    transpile: ["apexcharts"],
   },
 
   modules: ["shadcn-nuxt"],
