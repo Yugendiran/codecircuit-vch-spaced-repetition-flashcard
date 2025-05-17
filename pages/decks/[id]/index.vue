@@ -47,9 +47,48 @@
         </TabsTrigger>
       </TabsList>
       <TabsContent value="all">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+        <!-- Empty state when no cards exist -->
+        <div v-if="deck.cards.length === 0" class="mt-8 text-center py-16">
+          <div class="flex justify-center">
+            <Inbox class="size-12 text-neutral-600 mb-3" />
+          </div>
+          <h3 class="text-lg font-medium text-white mb-2">
+            No cards in this deck
+          </h3>
+          <p class="text-neutral-400 mb-6">
+            Get started by adding your first flashcard
+          </p>
+          <Button @click="modals.createCard.isOpen = true">
+            <Plus class="size-4 mr-2" />
+            Create New Card
+          </Button>
+        </div>
+
+        <!-- Empty state when no search results -->
+        <div
+          v-else-if="filteredCards.length === 0"
+          class="mt-8 text-center py-16"
+        >
+          <div class="flex justify-center">
+            <SearchX class="size-12 text-neutral-600 mb-3" />
+          </div>
+          <h3 class="text-lg font-medium text-white mb-2">No cards found</h3>
+          <p class="text-neutral-400 mb-6">
+            Try a different search term or clear your search
+          </p>
+          <Button variant="outline" @click="search = ''">
+            <X class="size-4 mr-2" />
+            Clear Search
+          </Button>
+        </div>
+
+        <!-- Cards grid -->
+        <div
+          v-else
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4"
+        >
           <div
-            v-for="(card, index) in deck.cards"
+            v-for="(card, index) in filteredCards"
             :key="index"
             class="bg-neutral-900 rounded-xl p-6 border border-neutral-800"
           >
@@ -59,7 +98,7 @@
                 size="sm"
                 variant="outline"
                 class="flex items-center gap-2"
-                @click="openViewCardDialog(index)"
+                @click="openViewCardDialog(getOriginalIndex(card))"
               >
                 <Eye class="size-3" />
                 View
@@ -68,7 +107,7 @@
                 size="sm"
                 variant="outline"
                 class="flex items-center gap-2"
-                @click="openEditCardDialog(index)"
+                @click="openEditCardDialog(getOriginalIndex(card))"
               >
                 <Edit class="size-3" />
                 Edit
@@ -77,7 +116,7 @@
                 size="sm"
                 variant="destructive"
                 class="flex items-center gap-2"
-                @click="openDeleteCardDialog(index)"
+                @click="openDeleteCardDialog(getOriginalIndex(card))"
               >
                 <Trash class="size-3" />
                 Delete
@@ -348,7 +387,16 @@
 </template>
 
 <script>
-import { Plus, Search, Edit, Trash, Eye } from "lucide-vue-next";
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash,
+  Eye,
+  Inbox,
+  SearchX,
+  X,
+} from "lucide-vue-next";
 import decks from "@/data/decks.json";
 
 export default {
@@ -358,6 +406,9 @@ export default {
     Edit,
     Eye,
     Trash,
+    Inbox,
+    SearchX,
+    X,
   },
   data() {
     return {
@@ -395,6 +446,21 @@ export default {
       },
     };
   },
+  computed: {
+    filteredCards() {
+      if (!this.deck) return [];
+      if (!this.search || this.search.trim() === "") return this.deck.cards;
+
+      const searchTerm = this.search.toLowerCase().trim();
+      return this.deck.cards.filter((card) => {
+        return (
+          card.front.toLowerCase().includes(searchTerm) ||
+          card.back.toLowerCase().includes(searchTerm) ||
+          card.tags.some((tag) => tag.toLowerCase().includes(searchTerm))
+        );
+      });
+    },
+  },
   mounted() {
     // get the deck from the data/decks.json file
     const deckId = parseInt(this.$route.params.id);
@@ -403,6 +469,12 @@ export default {
     this.deck = deck;
   },
   methods: {
+    getOriginalIndex(card) {
+      // Find the original index in the deck.cards array
+      return this.deck.cards.findIndex(
+        (c) => c.front === card.front && c.back === card.back
+      );
+    },
     createCard() {
       let errors = 0;
 
