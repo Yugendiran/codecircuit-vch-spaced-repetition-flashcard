@@ -1323,16 +1323,30 @@ export default {
 
 .transform-style-preserve-3d {
   transform-style: preserve-3d;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
 .backface-hidden {
   backface-visibility: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
 }
 
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+.backface-hidden:not(.rotate-y-180) {
+  z-index: 2;
 }
 
 .perspective-1000:hover .backface-hidden {
