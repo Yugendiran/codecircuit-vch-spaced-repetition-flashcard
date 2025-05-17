@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
 
   // Get request body
   const body = await readBody(event);
+  const topic = body.topic || "";
 
   const aiResponse = await openai.chat.completions.create({
     model: "gpt-4o-mini",
@@ -29,7 +30,9 @@ export default defineEventHandler(async (event) => {
       },
       {
         role: "user",
-        content: `Generate a deck of flashcards`,
+        content: `Generate a deck of flashcards ${
+          topic ? `about ${topic}` : ""
+        }`,
       },
     ],
     response_format: {
@@ -44,15 +47,19 @@ export default defineEventHandler(async (event) => {
             content: {
               type: "object",
               additionalProperties: false,
-              description: `Generate a title and description for the deck. The title should be a single word or phrase. The description should be a short description of the deck`,
+              description: `Generate a title and description for a flashcard deck ${
+                topic ? `about ${topic}` : ""
+              }. The title should be a single word or phrase. The description should be a short description of the deck`,
               properties: {
                 title: {
                   type: "string",
-                  description: "Title of the deck",
+                  description:
+                    "Title of the deck. It should be a single word or phrase. But not same as the topic",
                 },
                 description: {
                   type: "string",
-                  description: "Description of the deck",
+                  description:
+                    "Description of the deck. It should be a short description of the deck. It should be a single sentence.",
                 },
               },
               required: ["title", "description"],

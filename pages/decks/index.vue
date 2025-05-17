@@ -51,14 +51,24 @@
       <!-- Create New Deck Card -->
       <div
         @click="modals.createDeck.isOpen = true"
-        class="rounded-lg p-6 border border-neutral-800 flex items-center justify-center flex-col h-full min-h-[250px] cursor-pointer"
+        class="rounded-lg p-6 border border-neutral-800 bg-gradient-to-br from-neutral-900 to-neutral-950 hover:from-purple-950/20 hover:to-neutral-950 hover:border-purple-800/50 transition-all duration-300 flex items-center justify-center flex-col h-full min-h-[250px] cursor-pointer group relative overflow-hidden"
       >
+        <div class="absolute inset-0 bg-grid-pattern opacity-5"></div>
         <div
-          class="w-10 h-10 rounded-full border border-neutral-800 flex items-center justify-center mb-4"
+          class="w-14 h-14 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-900/20 transform group-hover:scale-110 transition-transform duration-300"
         >
-          <span class="text-neutral-400 text-xl">+</span>
+          <span class="text-white text-2xl font-light">+</span>
         </div>
-        <p class="text-neutral-400">Create New Deck</p>
+        <p class="text-white font-medium text-lg mb-2">Create New Deck</p>
+        <p class="text-neutral-400 text-sm text-center max-w-[180px]">
+          Build a custom deck or generate one with AI
+        </p>
+        <div
+          class="mt-5 flex items-center gap-2 opacity-80 group-hover:opacity-100 transition-opacity"
+        >
+          <span class="text-purple-400 text-xs">✨</span>
+          <span class="text-purple-400 text-xs">AI-powered</span>
+        </div>
       </div>
     </div>
 
@@ -118,10 +128,102 @@
               }}
             </Button>
           </div>
+
+          <div
+            v-if="modals.createDeck.isGenerating"
+            class="mt-4 border border-purple-800/30 bg-purple-950/10 rounded-lg p-3 animate-pulse"
+          >
+            <div class="flex items-center">
+              <div class="animate-spin mr-2">
+                <svg
+                  class="w-4 h-4 text-purple-500"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    class="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    stroke-width="4"
+                  ></circle>
+                  <path
+                    class="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+              </div>
+              <p class="text-sm text-purple-300">
+                {{ modals.createDeck.generationStatus }}
+              </p>
+            </div>
+          </div>
+
+          <div
+            v-if="
+              !modals.createDeck.isGenerating &&
+              !modals.createDeck.values.name &&
+              !modals.createDeck.values.description
+            "
+            class="mt-4 border border-neutral-800 rounded-lg p-3"
+          >
+            <p class="text-xs text-neutral-500 mb-2">Try a suggested topic:</p>
+            <div class="flex flex-wrap gap-2">
+              <button
+                v-for="(topic, index) in suggestedTopics"
+                :key="index"
+                @click="generateDeckWithTopic(topic)"
+                class="px-3 py-1 text-xs rounded-full border border-purple-800/50 text-purple-300 hover:bg-purple-900/20 transition-colors"
+              >
+                {{ topic }}
+              </button>
+            </div>
+          </div>
+
+          <div
+            v-if="
+              !modals.createDeck.isGenerating &&
+              (modals.createDeck.values.name ||
+                modals.createDeck.values.description)
+            "
+            class="mt-4 border border-neutral-800 rounded-lg p-3"
+          >
+            <p class="text-xs text-neutral-500 mb-1">AI suggested:</p>
+            <div class="flex items-start">
+              <div
+                class="w-5 h-5 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 flex-shrink-0 flex items-center justify-center text-white text-xs mt-0.5"
+              >
+                ✨
+              </div>
+              <div class="ml-2">
+                <p
+                  v-if="modals.createDeck.values.name"
+                  class="text-white text-sm font-medium"
+                >
+                  {{ modals.createDeck.values.name }}
+                </p>
+                <p
+                  v-if="modals.createDeck.values.description"
+                  class="text-neutral-400 text-xs mt-1"
+                >
+                  {{ modals.createDeck.values.description }}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <DialogFooter>
-          <Button variant="secondary" @click="modals.createDeck.isOpen = false">
+          <Button
+            variant="secondary"
+            @click="
+              modals.createDeck.isOpen = false;
+              resetCreateDeckForm();
+            "
+          >
             Cancel
           </Button>
           <Button @click="createDeck()">
@@ -320,6 +422,8 @@ export default {
             name: "",
             description: "",
           },
+          aiResponse: null,
+          generationStatus: "",
         },
         deleteDeck: {
           isOpen: false,
@@ -333,23 +437,55 @@ export default {
           showAnswer: false,
         },
       },
+      suggestedTopics: [
+        "Computer Science",
+        "Mathematics",
+        "Language Learning",
+        "History",
+        "Science",
+      ],
     };
   },
   methods: {
+    resetCreateDeckForm() {
+      this.modals.createDeck.values.name = "";
+      this.modals.createDeck.values.description = "";
+      this.modals.createDeck.errors.name = "";
+      this.modals.createDeck.errors.description = "";
+      this.modals.createDeck.aiResponse = null;
+      this.modals.createDeck.generationStatus = "";
+    },
     async generateDeckInModal() {
       this.modals.createDeck.isGenerating = true;
+      this.modals.createDeck.generationStatus =
+        "Thinking of a great deck idea...";
 
       try {
+        // Add a small delay with status messages to improve UX
+        setTimeout(() => {
+          this.modals.createDeck.generationStatus =
+            "Crafting the perfect title...";
+        }, 800);
+
+        setTimeout(() => {
+          this.modals.createDeck.generationStatus =
+            "Writing an engaging description...";
+        }, 1600);
+
         const response = await $fetch("/api/generate-deck", {
           method: "POST",
+          body: { topic: "" },
         });
 
         // Set the values in the modal
         this.modals.createDeck.values.name = response.content.title;
         this.modals.createDeck.values.description =
           response.content.description;
+        this.modals.createDeck.aiResponse = response.content;
       } catch (error) {
         console.error("Error generating deck:", error);
+        this.modals.createDeck.generationStatus =
+          "Error generating deck. Please try again.";
       } finally {
         this.modals.createDeck.isGenerating = false;
       }
@@ -376,10 +512,7 @@ export default {
         cards: [],
       });
 
-      this.modals.createDeck.values.name = "";
-      this.modals.createDeck.values.description = "";
-      this.modals.createDeck.errors.name = "";
-      this.modals.createDeck.errors.description = "";
+      this.resetCreateDeckForm();
       this.modals.createDeck.isOpen = false;
     },
     confirmDeleteDeck(deckIndex, deckName) {
@@ -428,6 +561,41 @@ export default {
         this.modals.study.showAnswer = false;
       }
     },
+    async generateDeckWithTopic(topic) {
+      this.modals.createDeck.isGenerating = true;
+      this.modals.createDeck.generationStatus = `Creating a deck about ${topic}...`;
+
+      try {
+        // Add a small delay with status messages to improve UX
+        setTimeout(() => {
+          this.modals.createDeck.generationStatus =
+            "Researching the subject...";
+        }, 800);
+
+        setTimeout(() => {
+          this.modals.createDeck.generationStatus =
+            "Crafting specialized content...";
+        }, 1600);
+
+        // Send the topic to the API
+        const response = await $fetch("/api/generate-deck", {
+          method: "POST",
+          body: { topic },
+        });
+
+        // Set the values in the modal
+        this.modals.createDeck.values.name = response.content.title;
+        this.modals.createDeck.values.description =
+          response.content.description;
+        this.modals.createDeck.aiResponse = response.content;
+      } catch (error) {
+        console.error("Error generating deck:", error);
+        this.modals.createDeck.generationStatus =
+          "Error generating deck. Please try again.";
+      } finally {
+        this.modals.createDeck.isGenerating = false;
+      }
+    },
   },
 };
 </script>
@@ -447,5 +615,15 @@ export default {
 
 .rotate-y-180 {
   transform: rotateY(180deg);
+}
+
+.bg-grid-pattern {
+  background-image: linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.05) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 </style>
