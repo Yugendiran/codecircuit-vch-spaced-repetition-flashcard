@@ -1,75 +1,113 @@
-# Nuxt Minimal Starter
+# CodeCircuit Spaced Repetition Flashcard App
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-## Setup
+A modern, interactive flashcard application built with Nuxt 3 that uses spaced repetition algorithms to optimize your learning experience. Perfect for students, professionals, and lifelong learners.
 
-Make sure to install dependencies:
+<p align="center">
+  <img src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/brain-circuit.svg" width="100" height="100" alt="Logo" style="filter: invert(50%) sepia(50%) saturate(1000%) hue-rotate(200deg);">
+</p>
+
+## ✨ Features
+
+- **Spaced Repetition Algorithm** - Cards are scheduled for review using proven spaced repetition techniques
+- **Beautiful UI** - Modern, responsive design built with Tailwind CSS and shadcn/ui
+- **Customizable Decks** - Create and manage flashcard decks on any topic
+- **Detailed Statistics** - Track your learning progress with comprehensive charts and analytics
+- **Mobile-friendly** - Study anywhere on any device
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+
+- PNPM (recommended) or NPM
+
+### Installation
+
+Clone the repository and install dependencies:
 
 ```bash
-# npm
-npm install
+# Clone the repository
+git clone https://github.com/yourusername/codecircuit-vch-spaced-repetition-flashcard.git
+cd codecircuit-vch-spaced-repetition-flashcard
 
-# pnpm
+# Install dependencies
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+## 🖥️ Development
 
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
+# Using pnpm (recommended)
 pnpm dev
 
-# yarn
-yarn dev
-
-# bun
-bun run dev
+# Using npm
+npm run dev
 ```
 
-## Production
+## 🏗️ Building for Production
 
 Build the application for production:
 
 ```bash
-# npm
-npm run build
-
-# pnpm
+# Using pnpm
 pnpm build
 
-# yarn
-yarn build
-
-# bun
-bun run build
+# Using npm
+npm run build
 ```
 
 Locally preview production build:
 
 ```bash
-# npm
-npm run preview
-
-# pnpm
+# Using pnpm
 pnpm preview
 
-# yarn
-yarn preview
-
-# bun
-bun run preview
+# Using npm
+npm run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## 📚 Project Structure
+
+```
+├── assets/              # Static assets
+├── components/          # Vue components
+├── data/                # JSON data files for flashcards
+├── layouts/             # App layouts
+├── pages/               # Application pages
+│   ├── index.vue        # Dashboard
+│   ├── review.vue       # Flashcard review
+│   ├── stats.vue        # Learning statistics
+│   └── decks/           # Deck management
+├── plugins/             # Nuxt plugins
+├── public/              # Public static files
+└── server/              # Server-side code
+```
+
+## 🛠️ Technologies Used
+
+- [Nuxt 3](https://nuxt.com/) - Vue.js framework
+- [Vue 3](https://vuejs.org/) - Progressive JavaScript framework
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
+- [shadcn/ui](https://ui.shadcn.com/) - UI component collection
+- [ApexCharts](https://apexcharts.com/) - Modern charting library
+- [Lucide Icons](https://lucide.dev/) - Beautiful & consistent icons
+- [dayjs](https://day.js.org/) - Date handling library
+
+## 📝 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
