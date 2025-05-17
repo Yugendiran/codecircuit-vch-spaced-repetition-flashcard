@@ -335,12 +335,6 @@ export default {
       },
     };
   },
-  async mounted() {
-    // const response = await $fetch("/api/generate-deck", {
-    //   method: "POST",
-    // });
-    // console.log(response);
-  },
   methods: {
     async generateDeckInModal() {
       this.modals.createDeck.isGenerating = true;

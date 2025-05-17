@@ -71,6 +71,20 @@
             <Plus class="size-4 mr-2" />
             Create New Card
           </Button>
+
+          <br />
+          <br />
+
+          <Button
+            variant="outline"
+            @click="generateCards"
+            :disabled="isGenerating"
+          >
+            <span class="text-purple-400 mr-2">✨</span>
+            {{ isGenerating ? "Generating..." : "Generate with AI" }}
+          </Button>
+
+          <!-- <Button variant="outline"> </Button> -->
         </div>
 
         <!-- Empty state when no search results -->
@@ -501,16 +515,6 @@ export default {
     const deck = decks.find((d) => d.id === deckId);
 
     this.deck = deck;
-
-    // const response = await $fetch("/api/generate-cards", {
-    //   method: "POST",
-    //   body: {
-    //     deckName: deck.name,
-    //     deckDescription: deck.description,
-    //   },
-    // });
-
-    // console.log(response);
   },
   methods: {
     getOriginalIndex(card) {
