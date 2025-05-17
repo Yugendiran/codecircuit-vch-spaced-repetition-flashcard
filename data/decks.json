@@ -11,7 +11,7 @@
         "nextReview": "",
         "repetitions": 0,
         "id": 1,
-        "isNew": false
+        "isNew": true
       },
       {
         "front": "Who was the first human to travel into space?",
@@ -141,7 +141,7 @@
         "front": "What is the difference between mean, median, and mode?",
         "back": "Mean is the average of a set of numbers, median is the middle value when the numbers are sorted, and mode is the value that occurs most frequently.",
         "tags": ["statistics", "data", "mean/median/mode"],
-        "nextReview": "",
+        "nextReview": "2025-05-17",
         "repetitions": 0,
         "id": 1,
         "isNew": false

@@ -1021,10 +1021,15 @@ export default {
 
         // Process the response
         if (response && response.content && response.content.length > 0) {
-          const cards = response.content.map((card) => ({
+          const cards = response.content.map((card, index) => ({
             ...card,
-            id: this.deck.cards.length + 1,
+            id: this.deck.cards.length + 1 + index,
             isNew: true, // Mark as new for animation
+            nextReview: "",
+            repetitions: 0,
+            easiness: 2.5,
+            interval: 0,
+            reviewHistory: [],
           }));
 
           this.modals.aiGeneration.cards = cards;
@@ -1128,13 +1133,18 @@ export default {
 
       if (errors > 0) return;
 
-      // Add the new card to the deck
+      // Add the new card to the deck with SM2 algorithm defaults
       this.deck.cards.push({
         front: this.modals.createCard.values.front,
         back: this.modals.createCard.values.back,
         tags: this.modals.createCard.values.tags,
         nextReview: "",
         repetitions: 0,
+        easiness: 2.5,
+        interval: 0,
+        reviewHistory: [],
+        isNew: true,
+        id: this.deck.cards.length + 1,
       });
 
       // Reset form

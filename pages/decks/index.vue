@@ -33,7 +33,9 @@
             class="rounded p-3 flex-1 border border-purple-600 bg-purple-900/10"
           >
             <p class="text-neutral-400 text-xs">Due Today</p>
-            <p class="text-white font-bold text-xl">-</p>
+            <p class="text-white font-bold text-xl">
+              {{ countDueCards(deck) }}
+            </p>
           </div>
         </div>
 
@@ -686,6 +688,27 @@ export default {
       } finally {
         this.modals.createDeck.isGenerating = false;
       }
+    },
+    countDueCards(deck) {
+      if (!deck || !deck.cards || deck.cards.length === 0) return 0;
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      return deck.cards.filter((card) => {
+        // Consider a card due if:
+        // 1. It's explicitly marked as new (isNew = true)
+        if (card.isNew === true) return true;
+
+        // 2. Its next review date matches today exactly
+        if (card.nextReview && card.nextReview !== "") {
+          const nextReview = new Date(card.nextReview);
+          nextReview.setHours(0, 0, 0, 0);
+          return nextReview.getTime() === today.getTime();
+        }
+
+        return false;
+      }).length;
     },
   },
 };
