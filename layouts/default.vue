@@ -47,10 +47,6 @@
                         <component :is="item.icon" class="w-4 h-4" />
                         <span>{{ item.title }}</span>
                       </div>
-
-                      <Badge v-if="item.badge" class="font-bold">
-                        {{ item.badge }}
-                      </Badge>
                     </SidebarMenuButton>
                   </NuxtLink>
                 </SidebarMenuItem>
