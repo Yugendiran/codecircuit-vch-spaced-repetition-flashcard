@@ -102,6 +102,22 @@
               {{ modals.createDeck.errors.description }}
             </p>
           </div>
+
+          <div class="mt-2">
+            <Button
+              variant="outline"
+              class="w-full flex items-center justify-center gap-2 border-purple-800 text-purple-400 hover:bg-purple-900/20"
+              @click="generateDeckInModal()"
+              :disabled="modals.createDeck.isGenerating"
+            >
+              <span class="text-purple-400">✨</span>
+              {{
+                modals.createDeck.isGenerating
+                  ? "Generating..."
+                  : "Generate with AI"
+              }}
+            </Button>
+          </div>
         </div>
 
         <DialogFooter>
@@ -295,6 +311,7 @@ export default {
       modals: {
         createDeck: {
           isOpen: false,
+          isGenerating: false,
           values: {
             name: "",
             description: "",
@@ -318,7 +335,31 @@ export default {
       },
     };
   },
+  async mounted() {
+    // const response = await $fetch("/api/generate-deck", {
+    //   method: "POST",
+    // });
+    // console.log(response);
+  },
   methods: {
+    async generateDeckInModal() {
+      this.modals.createDeck.isGenerating = true;
+
+      try {
+        const response = await $fetch("/api/generate-deck", {
+          method: "POST",
+        });
+
+        // Set the values in the modal
+        this.modals.createDeck.values.name = response.content.title;
+        this.modals.createDeck.values.description =
+          response.content.description;
+      } catch (error) {
+        console.error("Error generating deck:", error);
+      } finally {
+        this.modals.createDeck.isGenerating = false;
+      }
+    },
     createDeck() {
       let errors = 0;
 

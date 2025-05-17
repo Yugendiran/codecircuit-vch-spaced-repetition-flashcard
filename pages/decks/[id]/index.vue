@@ -21,6 +21,15 @@
           Add Card
         </Button>
 
+        <Button
+          variant="outline"
+          @click="generateCards"
+          :disabled="isGenerating"
+        >
+          <span class="text-purple-400 mr-2">✨</span>
+          {{ isGenerating ? "Generating..." : "Generate" }}
+        </Button>
+
         <Button variant="secondary"> Review Deck <Badge>4</Badge> </Button>
       </div>
     </div>
@@ -438,6 +447,7 @@ export default {
     return {
       search: "",
       deck: null,
+      isGenerating: false,
       modals: {
         createCard: {
           isOpen: false,
@@ -485,12 +495,22 @@ export default {
       });
     },
   },
-  mounted() {
+  async mounted() {
     // get the deck from the data/decks.json file
     const deckId = parseInt(this.$route.params.id);
     const deck = decks.find((d) => d.id === deckId);
 
     this.deck = deck;
+
+    // const response = await $fetch("/api/generate-cards", {
+    //   method: "POST",
+    //   body: {
+    //     deckName: deck.name,
+    //     deckDescription: deck.description,
+    //   },
+    // });
+
+    // console.log(response);
   },
   methods: {
     getOriginalIndex(card) {
@@ -498,6 +518,36 @@ export default {
       return this.deck.cards.findIndex(
         (c) => c.front === card.front && c.back === card.back
       );
+    },
+    async generateCards() {
+      if (!this.deck) return;
+
+      this.isGenerating = true;
+
+      try {
+        const response = await $fetch("/api/generate-cards", {
+          method: "POST",
+          body: {
+            deckName: this.deck.name,
+            deckDescription: this.deck.description,
+          },
+        });
+
+        if (response && response.content && response.content.length > 0) {
+          const cards = await response.content.map((card) => ({
+            ...card,
+            id: this.deck.cards.length + 1,
+          }));
+
+          this.deck.cards = [...this.deck.cards, ...cards];
+        }
+      } catch (error) {
+        console.error("Error generating cards:", error);
+      } finally {
+        this.isGenerating = false;
+
+        console.log(this.deck.cards);
+      }
     },
     createCard() {
       let errors = 0;
