@@ -342,6 +342,18 @@
                         : ""
                     }}
                   </p>
+                  <div class="flex flex-wrap gap-2 mt-3">
+                    <span
+                      v-for="(tag, tagIndex) in modals.viewCard.cardIndex !==
+                      null
+                        ? deck.cards[modals.viewCard.cardIndex].tags
+                        : []"
+                      :key="tagIndex"
+                      class="px-2 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-md"
+                    >
+                      {{ tag }}
+                    </span>
+                  </div>
                   <div class="mt-6">
                     <Button @click="modals.viewCard.showAnswer = true">
                       See Answer
@@ -365,6 +377,18 @@
                         : ""
                     }}
                   </p>
+                  <div class="flex flex-wrap gap-2 mt-3">
+                    <span
+                      v-for="(tag, tagIndex) in modals.viewCard.cardIndex !==
+                      null
+                        ? deck.cards[modals.viewCard.cardIndex].tags
+                        : []"
+                      :key="tagIndex"
+                      class="px-2 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-md"
+                    >
+                      {{ tag }}
+                    </span>
+                  </div>
                   <div class="mt-6">
                     <Button @click="modals.viewCard.showAnswer = false">
                       See Question

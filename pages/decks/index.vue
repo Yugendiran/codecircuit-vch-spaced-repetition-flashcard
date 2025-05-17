@@ -10,7 +10,11 @@
       >
         <div class="flex items-center justify-between">
           <h2 class="text-xl font-bold text-white mb-1">{{ deck.name }}</h2>
-          <Button variant="ghost" size="icon" @click="deleteDeck(deckIndex)">
+          <Button
+            variant="ghost"
+            size="icon"
+            @click="confirmDeleteDeck(deckIndex, deck.name)"
+          >
             <Trash class="w-2 h-2" />
           </Button>
         </div>
@@ -38,9 +42,9 @@
             <Button> View Cards </Button>
           </NuxtLink>
 
-          <NuxtLink :to="`/decks/${deck.id}/study`">
-            <Button variant="secondary"> Study Now </Button>
-          </NuxtLink>
+          <Button variant="secondary" @click="openStudyModal(deck)">
+            Study Now
+          </Button>
         </div>
       </div>
 
@@ -111,17 +115,179 @@
         </DialogFooter>
       </DialogContent>
     </Dialog>
+
+    <!-- Delete Confirmation Modal -->
+    <Dialog v-model:open="modals.deleteDeck.isOpen">
+      <DialogContent>
+        <DialogHeader class="border-b border-neutral-800 pb-4">
+          <DialogTitle>Delete Deck</DialogTitle>
+        </DialogHeader>
+
+        <div class="py-4">
+          <p class="text-neutral-400">
+            Are you sure you want to delete "{{ modals.deleteDeck.deckName }}"?
+            This action cannot be undone.
+          </p>
+        </div>
+
+        <DialogFooter>
+          <Button variant="secondary" @click="modals.deleteDeck.isOpen = false">
+            Cancel
+          </Button>
+          <Button variant="destructive" @click="executeDeleteDeck()">
+            Delete
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+
+    <!-- Study Modal -->
+    <Dialog v-model:open="modals.study.isOpen">
+      <DialogContent class="max-w-3xl">
+        <DialogHeader class="border-b border-neutral-800 pb-4">
+          <DialogTitle>Study: {{ modals.study.currentDeck?.name }}</DialogTitle>
+        </DialogHeader>
+
+        <div class="py-4">
+          <!-- Progress Bar -->
+          <div class="mb-6">
+            <div class="flex justify-between text-sm text-neutral-400 mb-2">
+              <span>Progress</span>
+              <span
+                >{{ modals.study.currentCardIndex + 1 }} of
+                {{ modals.study.currentDeck?.cards.length }}</span
+              >
+            </div>
+            <div class="w-full bg-neutral-800 rounded-full h-2.5">
+              <div
+                class="bg-purple-600 h-2.5 rounded-full"
+                :style="{
+                  width: `${
+                    ((modals.study.currentCardIndex + 1) /
+                      modals.study.currentDeck?.cards.length) *
+                    100
+                  }%`,
+                }"
+              ></div>
+            </div>
+          </div>
+
+          <!-- Flashcard with flip animation -->
+          <div
+            v-if="modals.study.currentDeck?.cards.length > 0"
+            class="relative min-h-[300px] w-full perspective-1000 mb-6"
+          >
+            <div
+              class="absolute w-full h-full transition-transform duration-500 transform-style-preserve-3d"
+              :class="{ 'rotate-y-180': modals.study.showAnswer }"
+            >
+              <!-- Front of card -->
+              <div
+                class="absolute w-full h-full backface-hidden rounded-lg p-6 border border-neutral-800 bg-neutral-900"
+              >
+                <div class="flex flex-col h-full">
+                  <h3 class="text-lg font-medium text-neutral-400 mb-4">
+                    Question
+                  </h3>
+                  <p class="text-white text-xl flex-grow">
+                    {{ getCurrentCard()?.front }}
+                  </p>
+                  <div class="flex flex-wrap gap-2 mt-3">
+                    <span
+                      v-for="(tag, tagIndex) in getCurrentCard()?.tags"
+                      :key="tagIndex"
+                      class="px-2 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-md"
+                    >
+                      {{ tag }}
+                    </span>
+                  </div>
+                  <div class="mt-6">
+                    <Button @click="modals.study.showAnswer = true"
+                      >Show Answer</Button
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <!-- Back of card -->
+              <div
+                class="absolute w-full h-full backface-hidden rotate-y-180 rounded-lg p-6 border border-neutral-800 bg-neutral-950"
+              >
+                <div class="flex flex-col h-full">
+                  <h3 class="text-lg font-medium text-neutral-400 mb-4">
+                    Answer
+                  </h3>
+                  <p class="text-white text-xl flex-grow">
+                    {{ getCurrentCard()?.back }}
+                  </p>
+                  <div class="flex flex-wrap gap-2 mt-3">
+                    <span
+                      v-for="(tag, tagIndex) in getCurrentCard()?.tags"
+                      :key="tagIndex"
+                      class="px-2 py-1 bg-neutral-800 text-neutral-300 text-xs rounded-md"
+                    >
+                      {{ tag }}
+                    </span>
+                  </div>
+                  <div class="mt-6">
+                    <Button @click="modals.study.showAnswer = false"
+                      >Show Question</Button
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Empty state when no cards -->
+          <div v-else class="text-center py-8">
+            <p class="text-neutral-400">This deck has no cards to study.</p>
+          </div>
+
+          <!-- Navigation controls -->
+          <div class="flex justify-between mt-4">
+            <Button
+              variant="outline"
+              @click="prevCard()"
+              :disabled="modals.study.currentCardIndex <= 0"
+            >
+              <ChevronLeft class="mr-2 h-4 w-4" /> Previous
+            </Button>
+
+            <Button
+              variant="outline"
+              @click="nextCard()"
+              :disabled="
+                !modals.study.currentDeck ||
+                modals.study.currentCardIndex >=
+                  modals.study.currentDeck.cards.length - 1
+              "
+            >
+              Next <ChevronRight class="ml-2 h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <DialogFooter>
+          <Button variant="secondary" @click="modals.study.isOpen = false">
+            Close
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 
 <script>
-import { Plus, Trash } from "lucide-vue-next";
+import { Plus, Trash, ChevronLeft, ChevronRight } from "lucide-vue-next";
 import decks from "@/data/decks.json";
 
 export default {
   components: {
     Plus,
     Trash,
+    ChevronLeft,
+    ChevronRight,
   },
   data() {
     return {
@@ -137,6 +303,17 @@ export default {
             name: "",
             description: "",
           },
+        },
+        deleteDeck: {
+          isOpen: false,
+          deckIndex: null,
+          deckName: "",
+        },
+        study: {
+          isOpen: false,
+          currentDeck: null,
+          currentCardIndex: 0,
+          showAnswer: false,
         },
       },
     };
@@ -170,9 +347,70 @@ export default {
       this.modals.createDeck.errors.description = "";
       this.modals.createDeck.isOpen = false;
     },
-    deleteDeck(deckIndex) {
-      this.decks.splice(deckIndex, 1);
+    confirmDeleteDeck(deckIndex, deckName) {
+      this.modals.deleteDeck.deckIndex = deckIndex;
+      this.modals.deleteDeck.deckName = deckName;
+      this.modals.deleteDeck.isOpen = true;
+    },
+    executeDeleteDeck() {
+      if (this.modals.deleteDeck.deckIndex !== null) {
+        this.decks.splice(this.modals.deleteDeck.deckIndex, 1);
+        this.modals.deleteDeck.deckIndex = null;
+        this.modals.deleteDeck.deckName = "";
+        this.modals.deleteDeck.isOpen = false;
+      }
+    },
+    openStudyModal(deck) {
+      this.modals.study.currentDeck = deck;
+      this.modals.study.currentCardIndex = 0;
+      this.modals.study.showAnswer = false;
+      this.modals.study.isOpen = true;
+    },
+    getCurrentCard() {
+      if (
+        !this.modals.study.currentDeck ||
+        this.modals.study.currentDeck.cards.length === 0
+      ) {
+        return null;
+      }
+      return this.modals.study.currentDeck.cards[
+        this.modals.study.currentCardIndex
+      ];
+    },
+    nextCard() {
+      if (
+        this.modals.study.currentDeck &&
+        this.modals.study.currentCardIndex <
+          this.modals.study.currentDeck.cards.length - 1
+      ) {
+        this.modals.study.currentCardIndex++;
+        this.modals.study.showAnswer = false;
+      }
+    },
+    prevCard() {
+      if (this.modals.study.currentCardIndex > 0) {
+        this.modals.study.currentCardIndex--;
+        this.modals.study.showAnswer = false;
+      }
     },
   },
 };
 </script>
+
+<style scoped>
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+</style>

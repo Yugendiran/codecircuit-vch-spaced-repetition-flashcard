@@ -4,11 +4,6 @@
       <h1 class="text-2xl font-bold text-white">Your Flashcards</h1>
 
       <div class="flex gap-2">
-        <Button @click="modals.createDeck.isOpen = true">
-          <Plus class="size-4 mr-2" />
-          Create Deck
-        </Button>
-
         <Button variant="outline" @click="$router.push('/stats')">
           <BarChart3 class="size-4 mr-2" />
           View Stats
@@ -78,7 +73,6 @@
 
 <script>
 import {
-  Plus,
   BarChart3,
   CalendarClock,
   ListChecks,
@@ -88,7 +82,6 @@ import {
 
 export default {
   components: {
-    Plus,
     BarChart3,
     CalendarClock,
     ListChecks,
