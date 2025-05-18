@@ -1012,13 +1012,16 @@ export default {
       }, 300);
 
       try {
-        const response = await $fetch("/api/generate-cards", {
-          method: "POST",
-          body: {
-            deckName: this.deck.name,
-            deckDescription: this.deck.description,
-          },
-        });
+        const response = await $fetch(
+          "https://api.crackaspire.com/api/public/generate-cards",
+          {
+            method: "POST",
+            body: {
+              deckName: this.deck.name,
+              deckDescription: this.deck.description,
+            },
+          }
+        );
 
         // Stop the progress interval immediately
         clearInterval(progressInterval);

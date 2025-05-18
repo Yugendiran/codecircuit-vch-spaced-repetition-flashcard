@@ -590,10 +590,13 @@ export default {
             "Writing an engaging description...";
         }, 1600);
 
-        const response = await $fetch("/api/generate-deck", {
-          method: "POST",
-          body: { topic: "" },
-        });
+        const response = await $fetch(
+          "https://api.crackaspire.com/api/public/generate-deck",
+          {
+            method: "POST",
+            body: { topic: "" },
+          }
+        );
 
         // Set the values in the modal
         this.modals.createDeck.values.name = response.content.title;
